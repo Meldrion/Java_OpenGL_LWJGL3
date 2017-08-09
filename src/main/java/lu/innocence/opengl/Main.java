@@ -29,8 +29,8 @@ public class Main {
                 this.model = loader.loadToVAO(vertices);
 
                 this.shaderProgram = new ShaderProgram();
-                this.shaderProgram.createVertexShader(Utils.loadResource("/vertex.vert"));
-                this.shaderProgram.createFragmentShader(Utils.loadResource("/fragment.frag"));
+                this.shaderProgram.createVertexShader(Utils.loadResource("/shaders/vertex.vert"));
+                this.shaderProgram.createFragmentShader(Utils.loadResource("/shaders/fragment.frag"));
                 this.shaderProgram.link();
             }
 
