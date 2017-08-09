@@ -3,6 +3,7 @@ package lu.innocence.opengl.core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.Version;
+import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
@@ -40,6 +41,7 @@ public class DisplayManager {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+
         // Create the window
         this.window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
         if (this.window == NULL)
@@ -69,9 +71,6 @@ public class DisplayManager {
         // Enable v-sync
         glfwSwapInterval(1);
 
-        // Make the window visible
-        glfwShowWindow(window);
-
     }
 
     public void run(RenderInterface renderInterface,int width,int height) {
@@ -100,11 +99,20 @@ public class DisplayManager {
         // bindings available for use.
         GL.createCapabilities();
         glfwSwapInterval(1);
+        glfwMakeContextCurrent(this.window);
 
         this.renderer = new Renderer();
         renderer.prepare();
 
-        this.renderInterface.create();
+        try {
+            this.renderInterface.create();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        // Make the window visible
+        glfwShowWindow(this.window);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
