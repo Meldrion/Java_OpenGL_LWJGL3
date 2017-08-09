@@ -1,32 +1,45 @@
 package lu.innocence.opengl;
 
-import lu.innocence.opengl.core.DisplayManager;
-import lu.innocence.opengl.core.Loader;
-import lu.innocence.opengl.core.RawModel;
+import lu.innocence.opengl.core.*;
 
 public class Main {
 
     private Main() {
 
-        Loader loader = new Loader();
-
         float[] vertices = {
                 // Left bottom triangle
                 -0.5f,  0.5f,  0f,
-                -0.5f, -0.5f, 0f,
-                 0.5f,  -0.5f,  0f,
+                -0.5f, -0.5f,  0f,
+                 0.5f, -0.5f,  0f,
                 // Right top triangle
                  0.5f, -0.5f,  0f,
                  0.5f,  0.5f,  0f,
                 -0.5f,  0.5f,  0f
         };
 
-        RawModel model = loader.loadToVAO(vertices);
-
         DisplayManager displayManager = new DisplayManager();
-        displayManager.run((renderer) -> {
-            //renderer.render(model);
-        },1280, 800);
+        displayManager.run(new RenderInterface() {
+
+            private Loader loader;
+            private RawModel model;
+
+            @Override
+            public void create() {
+                this.loader = new Loader();
+                this.model = loader.loadToVAO(vertices);
+            }
+
+            @Override
+            public void render(Renderer renderer) {
+                renderer.render(this.model);
+            }
+
+            @Override
+            public void destroy() {
+                this.loader.cleanUp();
+            }
+
+        }, 1280, 800);
     }
 
     public static void main(String[] args) {

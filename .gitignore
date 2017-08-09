@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/
+hs_err_pid7782.log
+learningOpenGL.iml
+src/test/
+target/

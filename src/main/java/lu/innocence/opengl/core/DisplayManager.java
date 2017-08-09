@@ -24,10 +24,6 @@ public class DisplayManager {
     private Renderer renderer;
     private RenderInterface renderInterface;
 
-    public DisplayManager() {
-        this.renderer = new Renderer();
-    }
-
     private void init(int width,int height) {
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
@@ -70,11 +66,15 @@ public class DisplayManager {
 
         // Make the window visible
         glfwShowWindow(window);
+
     }
 
     public void run(RenderInterface renderInterface,int width,int height) {
 
         LOGGER.info("LWJGL - {} ",Version.getVersion());
+
+        this.renderInterface = renderInterface;
+
         init(width,height);
         loop();
 
@@ -94,11 +94,12 @@ public class DisplayManager {
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
-
-        glfwSwapInterval(60);
+        glfwSwapInterval(1);
 
         this.renderer = new Renderer();
         renderer.prepare();
+
+        this.renderInterface.create();
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
