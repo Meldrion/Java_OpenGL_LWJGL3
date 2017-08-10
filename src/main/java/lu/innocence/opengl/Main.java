@@ -2,8 +2,14 @@ package lu.innocence.opengl;
 
 import lu.innocence.opengl.core.*;
 import lu.innocence.opengl.shaders.StaticShader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
 
 public class Main {
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     private Main() {
 
@@ -19,13 +25,13 @@ public class Main {
                 3,1,2 // Bottom Right Triangle (V3,V1,V2)
         };
 
-
         DisplayManager displayManager = new DisplayManager();
         displayManager.run(new RenderInterface() {
 
             private Loader loader;
             private RawModel model;
             private ShaderProgram shaderProgram;
+            private Texture testTexture;
 
             @Override
             public void create() throws Exception {
@@ -34,13 +40,22 @@ public class Main {
 
                 this.shaderProgram = new StaticShader();
                 this.shaderProgram.link();
+
+                try {
+                    URL url = Main.class.getClass().getResource("/textures/cave.png");
+                    this.testTexture = new Texture(url.getFile());
+                } catch (Exception e) {
+                    LOGGER.error(e);
+                }
             }
 
             @Override
             public void render(Renderer renderer) {
 
+                this.testTexture.bind();
                 this.shaderProgram.bind();
                 renderer.render(this.model);
+                this.testTexture.unbind();
             }
 
             @Override

@@ -22,11 +22,18 @@
 
 
     <properties>
+        <pngdecoder.version>1.0</pngdecoder.version>
         <lwjgl.version>3.1.2</lwjgl.version>
         <lwjgl.natives>natives-linux</lwjgl.natives>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.l33tlabs.twl</groupId>
+            <artifactId>pngdecoder</artifactId>
+            <version>${pngdecoder.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.lwjgl</groupId>
