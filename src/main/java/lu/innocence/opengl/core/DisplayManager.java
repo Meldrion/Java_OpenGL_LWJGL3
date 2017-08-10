@@ -14,6 +14,7 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengles.GLES20.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengles.GLES20.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.system.MemoryStack.stackPush;
@@ -80,7 +81,7 @@ public class DisplayManager {
         this.renderInterface = renderInterface;
 
         init(width,height);
-        loop();
+        loop(width,height);
 
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window);
@@ -90,7 +91,7 @@ public class DisplayManager {
         glfwTerminate();
     }
 
-    private void loop() {
+    private void loop(int width,int height) {
 
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -100,6 +101,8 @@ public class DisplayManager {
         GL.createCapabilities();
         glfwSwapInterval(1);
         glfwMakeContextCurrent(this.window);
+
+        /*glViewport(0, 0,width,height);*/
 
         this.renderer = new Renderer();
         renderer.prepare();

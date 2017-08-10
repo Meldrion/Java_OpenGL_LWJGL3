@@ -1,6 +1,8 @@
 package lu.innocence.opengl.core;
 
 
+import org.lwjgl.opengl.GL20;
+
 import static org.lwjgl.opengl.GL20.*;
 
 public class ShaderProgram {
@@ -64,6 +66,10 @@ public class ShaderProgram {
 
     }
 
+    public void bindAttribute(int attribute,String variableName) {
+        GL20.glBindAttribLocation(this.programId,attribute,variableName);
+    }
+
     public void bind() {
         glUseProgram(programId);
     }
@@ -75,6 +81,10 @@ public class ShaderProgram {
     public void cleanup() {
         unbind();
         if (programId != 0) {
+            glDetachShader(programId,vertexShaderId);
+            glDetachShader(programId,fragmentShaderId);
+            glDeleteShader(vertexShaderId);
+            glDeleteShader(fragmentShaderId);
             glDeleteProgram(programId);
         }
     }

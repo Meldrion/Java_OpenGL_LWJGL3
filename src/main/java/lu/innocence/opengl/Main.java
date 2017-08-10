@@ -1,6 +1,7 @@
 package lu.innocence.opengl;
 
 import lu.innocence.opengl.core.*;
+import lu.innocence.opengl.shaders.StaticShader;
 
 public class Main {
 
@@ -31,9 +32,7 @@ public class Main {
                 this.loader = new Loader();
                 this.model = loader.loadToVAO(vertices,indices);
 
-                this.shaderProgram = new ShaderProgram();
-                this.shaderProgram.createVertexShader(Utils.loadResource("/shaders/vertex.vert"));
-                this.shaderProgram.createFragmentShader(Utils.loadResource("/shaders/fragment.frag"));
+                this.shaderProgram = new StaticShader();
                 this.shaderProgram.link();
             }
 
