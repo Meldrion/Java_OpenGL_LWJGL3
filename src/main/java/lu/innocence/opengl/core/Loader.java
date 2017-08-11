@@ -1,11 +1,14 @@
 package lu.innocence.opengl.core;
 
 
-import de.matthiasmann.twl.utils.PNGDecoder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -14,12 +17,16 @@ import java.util.List;
 
 public class Loader {
 
+    private static final Logger LOGGER = LogManager.getLogger(Loader.class);
+
     private List<Integer> vaos;
     private List<Integer> vbos;
+    private List<Integer> textures;
 
     public Loader() {
         this.vaos = new ArrayList<>();
         this.vbos = new ArrayList<>();
+        this.textures = new ArrayList<>();
     }
 
     public RawModel loadToVAO(float[] positions,int[] indices) {
@@ -28,6 +35,18 @@ public class Loader {
         storeDataInAttributeList(0,positions);
         unbindVAO();
         return new RawModel(voaID,indices.length);
+    }
+
+    public int loadTexture(String filename) {
+        int texture;
+        try {
+            texture = TextureLoader.loadTexture(filename);
+        } catch (IOException e) {
+            LOGGER.error(e);
+            return 0;
+        }
+        this.textures.add(texture);
+        return texture;
     }
 
     private int createVAO() {
@@ -74,11 +93,17 @@ public class Loader {
     }
 
     public void cleanUp() {
+
         for (int vao : this.vaos) {
             GL30.glDeleteVertexArrays(vao);
         }
+
         for (int vbo : this.vbos) {
-            GL30.glDeleteVertexArrays(vbo);
+            GL15.glDeleteBuffers(vbo);
+        }
+
+        for (int texture : this.textures) {
+            GL11.glDeleteTextures(texture);
         }
     }
 
