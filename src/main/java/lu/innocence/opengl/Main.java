@@ -1,10 +1,15 @@
 package lu.innocence.opengl;
 
 import lu.innocence.opengl.core.*;
-import lu.innocence.opengl.shaders.StaticShader;
+import lu.innocence.opengl.core.models.RawModel;
+import lu.innocence.opengl.core.models.TexturedModel;
+import lu.innocence.opengl.core.shaders.ShaderProgram;
+import lu.innocence.opengl.core.shaders.StaticShader;
+import lu.innocence.opengl.core.texture.ModelTexture;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 
 public class Main {
@@ -25,36 +30,46 @@ public class Main {
                 3,1,2 // Bottom Right Triangle (V3,V1,V2)
         };
 
+        float [] textureCoords = {
+                0,0,
+                0,1,
+                1,1,
+                1,0
+        };
+
         DisplayManager displayManager = new DisplayManager();
         displayManager.run(new RenderInterface() {
 
             private Loader loader;
-            private RawModel model;
+            private TexturedModel texturedModel;
             private ShaderProgram shaderProgram;
 
             @Override
             public void create() throws Exception {
                 this.loader = new Loader();
-                this.model = loader.loadToVAO(vertices,indices);
+                RawModel model = loader.loadToVAO(vertices,textureCoords,indices);
+
+                String fileName = "textures/chara.png";
+                URL url = Main.class.getClassLoader().getResource(fileName);
+                if (url == null)
+                    throw new FileNotFoundException(fileName);
+
+                ModelTexture texture = new ModelTexture(loader.loadTexture
+                        (url.toString()));
+
+                this.texturedModel = new TexturedModel(model,texture);
 
                 this.shaderProgram = new StaticShader();
                 this.shaderProgram.link();
 
-/*                try {
-                    URL url = Main.class.getClass().getResource("/textures/cave.png");
-                    this.testTexture = new Texture(url.getFile());
-                } catch (Exception e) {
-                    LOGGER.error(e);
-                }*/
+                LOGGER.info("Creating and Loading worked fine");
+
             }
 
             @Override
             public void render(Renderer renderer) {
-
-                //this.testTexture.bind();
                 this.shaderProgram.bind();
-                renderer.render(this.model);
-                //this.testTexture.unbind();
+                renderer.render(this.texturedModel);
             }
 
             @Override

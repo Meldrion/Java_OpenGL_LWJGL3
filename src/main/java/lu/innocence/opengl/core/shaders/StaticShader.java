@@ -1,7 +1,6 @@
-package lu.innocence.opengl.shaders;
+package lu.innocence.opengl.core.shaders;
 
 import lu.innocence.opengl.Utils;
-import lu.innocence.opengl.core.ShaderProgram;
 
 public class StaticShader extends ShaderProgram implements ShaderInterface {
 
@@ -13,6 +12,7 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
 
     public void bindAttributes() {
         super.bindAttribute(0,"position");
+        super.bindAttribute(1,"textureCoords");
     }
 
 

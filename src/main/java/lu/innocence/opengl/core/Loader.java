@@ -1,6 +1,7 @@
 package lu.innocence.opengl.core;
 
 
+import lu.innocence.opengl.core.models.RawModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
@@ -29,10 +30,11 @@ public class Loader {
         this.textures = new ArrayList<>();
     }
 
-    public RawModel loadToVAO(float[] positions,int[] indices) {
+    public RawModel loadToVAO(float[] positions,float[] textureCoords, int[] indices) {
         int voaID = createVAO();
         bindIndecesBuffer(indices);
-        storeDataInAttributeList(0,positions);
+        storeDataInAttributeList(0,3,positions);
+        storeDataInAttributeList(1,2,textureCoords);
         unbindVAO();
         return new RawModel(voaID,indices.length);
     }
@@ -56,13 +58,13 @@ public class Loader {
         return vaoID;
     }
 
-    private void storeDataInAttributeList(int attributeNumber, float[] data) {
+    private void storeDataInAttributeList(int attributeNumber,int coordinateSize, float[] data) {
         int vboID = GL15.glGenBuffers();
         vbos.add(vboID);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,vboID);
         FloatBuffer buffer = storeDataIndFloatBuffer(data);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER,buffer,GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(attributeNumber,3, GL11.GL_FLOAT,false,0,0);
+        GL20.glVertexAttribPointer(attributeNumber,coordinateSize, GL11.GL_FLOAT,false,0,0);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,0);
     }
 

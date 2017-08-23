@@ -1,4 +1,4 @@
-package lu.innocence.opengl.core;
+package lu.innocence.opengl.core.models;
 
 public class RawModel {
 
