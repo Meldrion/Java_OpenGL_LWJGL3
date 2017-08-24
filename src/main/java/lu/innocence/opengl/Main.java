@@ -1,6 +1,7 @@
 package lu.innocence.opengl;
 
 import lu.innocence.opengl.core.*;
+import lu.innocence.opengl.core.exception.GLFWException;
 import lu.innocence.opengl.core.models.RawModel;
 import lu.innocence.opengl.core.models.TexturedModel;
 import lu.innocence.opengl.core.shaders.ShaderProgram;
@@ -16,7 +17,7 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
-    private Main() {
+    private Main() throws GLFWException {
 
         float[] vertices = {
                 -0.5f,  0.5f, 0.0f, // V0
@@ -48,28 +49,22 @@ public class Main {
             public void create() throws Exception {
                 this.loader = new Loader();
                 RawModel model = loader.loadToVAO(vertices,textureCoords,indices);
-
                 String fileName = "textures/chara.png";
                 URL url = Main.class.getClassLoader().getResource(fileName);
                 if (url == null)
                     throw new FileNotFoundException(fileName);
-
                 ModelTexture texture = new ModelTexture(loader.loadTexture
                         (url.getFile()));
-
                 this.texturedModel = new TexturedModel(model,texture);
-
                 this.shaderProgram = new StaticShader();
-                this.shaderProgram.link();
-
                 LOGGER.info("Creating and Loading worked fine");
-
             }
 
             @Override
             public void render(Renderer renderer) {
                 this.shaderProgram.bind();
-                ((StaticShader)this.shaderProgram).setGrayScaleValue(1f);
+                ((StaticShader)this.shaderProgram).setGrayScaleValue(0.75f);
+                ((StaticShader)this.shaderProgram).setColorValue(1,1,1,1);
                 renderer.render(this.texturedModel);
                 this.shaderProgram.unbind();
             }
@@ -83,7 +78,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        new Main();
+        try {
+            new Main();
+        } catch (GLFWException e) {
+            LOGGER.error(e);
+        }
     }
 
 }

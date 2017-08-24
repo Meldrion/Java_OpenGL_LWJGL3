@@ -1,5 +1,6 @@
 package lu.innocence.opengl.core;
 
+import lu.innocence.opengl.core.exception.GLFWException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.Version;
@@ -19,10 +20,12 @@ public class DisplayManager {
 
     private static final Logger LOGGER = LogManager.getLogger(DisplayManager.class);
     private long window;
+
+    @SuppressWarnings("FieldCanBeLocal")
     private Renderer renderer;
     private RenderInterface renderInterface;
 
-    private void init(int width,int height) {
+    private void init(int width,int height) throws GLFWException {
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
         if (!glfwInit())
@@ -41,7 +44,7 @@ public class DisplayManager {
         // Create the window
         this.window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
         if (this.window == NULL)
-            throw new RuntimeException("Failed to create the GLFW window");
+            throw new GLFWException("Failed to create the GLFW window");
 
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
@@ -69,7 +72,7 @@ public class DisplayManager {
 
     }
 
-    public void run(RenderInterface renderInterface,int width,int height) {
+    public void run(RenderInterface renderInterface,int width,int height) throws GLFWException {
 
         LOGGER.info("LWJGL - {} ",Version.getVersion());
 

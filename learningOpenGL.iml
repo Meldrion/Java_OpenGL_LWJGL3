@@ -12,7 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.l33tlabs.twl:pngdecoder:1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.l33tlabs.twl:pngdecoder:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl:lwjgl:natives-linux:3.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl:lwjgl:3.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl:lwjgl-assimp:3.1.2" level="project" />

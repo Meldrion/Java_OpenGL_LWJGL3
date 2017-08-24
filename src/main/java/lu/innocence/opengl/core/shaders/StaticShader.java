@@ -5,9 +5,8 @@ import lu.innocence.opengl.Utils;
 public class StaticShader extends ShaderProgram implements ShaderInterface {
 
     public StaticShader() throws Exception {
-        super();
-        this.createVertexShader(Utils.loadResource("/shaders/vertex.vert"));
-        this.createFragmentShader(Utils.loadResource("/shaders/fragment.frag"));
+        super(Utils.loadResource("/shaders/vertex.vert"),
+              Utils.loadResource("/shaders/fragment.frag"));
     }
 
     public void bindAttributes() {
@@ -20,5 +19,8 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
         super.setUniformFloat("greyscale",value);
     }
 
+    public void setColorValue(float r, float g, float b, float a) {
+        super.setUniformVec4("color_manipulation" ,r,g,b,a);
+    }
 
 }
