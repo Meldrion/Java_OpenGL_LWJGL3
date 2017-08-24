@@ -4,13 +4,12 @@ import lu.innocence.opengl.core.models.RawModel;
 import lu.innocence.opengl.core.models.TexturedModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 
-import static org.lwjgl.opengl.GL11.GL_VERSION;
-import static org.lwjgl.opengl.GL11.glGetString;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL14.GL_FUNC_ADD;
+import static org.lwjgl.opengl.GL14.glBlendEquation;
 
 
 public class Renderer {
@@ -20,10 +19,16 @@ public class Renderer {
     public Renderer() {
         String openGLVersion = glGetString(GL_VERSION);
         LOGGER.info(openGLVersion);
+        this.init();
+    }
+
+    private void init() {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     public void prepare() {
-        GL11.glClearColor(0,0,0,1);
+        GL11.glClearColor(1,0,0,1);
     }
 
     public void render(TexturedModel texturedModel) {

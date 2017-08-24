@@ -55,7 +55,7 @@ public class Main {
                     throw new FileNotFoundException(fileName);
 
                 ModelTexture texture = new ModelTexture(loader.loadTexture
-                        (url.toString()));
+                        (url.getFile()));
 
                 this.texturedModel = new TexturedModel(model,texture);
 
