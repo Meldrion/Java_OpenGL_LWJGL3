@@ -69,7 +69,9 @@ public class Main {
             @Override
             public void render(Renderer renderer) {
                 this.shaderProgram.bind();
+                ((StaticShader)this.shaderProgram).setGrayScaleValue(1f);
                 renderer.render(this.texturedModel);
+                this.shaderProgram.unbind();
             }
 
             @Override

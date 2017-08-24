@@ -13,6 +13,11 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
     public void bindAttributes() {
         super.bindAttribute(0,"position");
         super.bindAttribute(1,"textureCoords");
+        super.bindAttribute(2,"greyscale");
+    }
+
+    public void setGrayScaleValue(float value) {
+        super.setUniformFloat("greyscale",value);
     }
 
 

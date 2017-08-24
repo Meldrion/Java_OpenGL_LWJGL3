@@ -2,6 +2,7 @@
 
 // in vec3 colour;
 in vec2 pass_textureCoords;
+uniform float greyscale;
 // out vec4 out_Color;
 
 uniform sampler2D textureSampler;
@@ -14,12 +15,11 @@ void main(void) {
         discard;
     }
 
-    float percent_grayscale = 0.5;
     float delta = (textureColor.r + textureColor.g + textureColor.b) / 3;
 
-    textureColor.r = delta * percent_grayscale + (1-percent_grayscale) * textureColor.r;
-    textureColor.g = delta * percent_grayscale + (1-percent_grayscale) * textureColor.g;
-    textureColor.b = delta * percent_grayscale + (1-percent_grayscale) * textureColor.b;
+    textureColor.r = delta * greyscale + (1-greyscale) * textureColor.r;
+    textureColor.g = delta * greyscale + (1-greyscale) * textureColor.g;
+    textureColor.b = delta * greyscale + (1-greyscale) * textureColor.b;
 
-    gl_FragColor = vec4(vec3(textureColor.r,textureColor.g,textureColor.b),0.75);
+    gl_FragColor = vec4(vec3(textureColor.r,textureColor.g,textureColor.b),1.0);
 }
