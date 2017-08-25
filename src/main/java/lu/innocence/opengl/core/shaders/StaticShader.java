@@ -13,13 +13,11 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
     public StaticShader() throws Exception {
         super(Utils.loadResource("/shaders/vertex.vert"),
               Utils.loadResource("/shaders/fragment.frag"));
-        this.getAllUniformLocations();
     }
 
     public void bindAttributes() {
         super.bindAttribute(0,"position");
         super.bindAttribute(1,"textureCoords");
-        super.bindAttribute(2,"greyscale");
     }
 
     public void setGrayScaleValue(float value) {

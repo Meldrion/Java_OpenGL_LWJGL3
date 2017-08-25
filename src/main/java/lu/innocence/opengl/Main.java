@@ -1,6 +1,7 @@
 package lu.innocence.opengl;
 
 import lu.innocence.opengl.core.*;
+import lu.innocence.opengl.core.entities.Entity;
 import lu.innocence.opengl.core.exception.GLFWException;
 import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.RawModel;
@@ -43,8 +44,8 @@ public class Main {
         displayManager.run(new RenderInterface() {
 
             private Loader loader;
-            private TexturedModel texturedModel;
-            private ShaderProgram shaderProgram;
+            private Entity entity;
+            private StaticShader shaderProgram;
             private Vector4f colorVector;
 
             @Override
@@ -57,7 +58,8 @@ public class Main {
                     throw new FileNotFoundException(fileName);
                 ModelTexture texture = new ModelTexture(loader.loadTexture
                         (url.getFile()));
-                this.texturedModel = new TexturedModel(model,texture);
+                TexturedModel texturedModel = new TexturedModel(model,texture);
+                this.entity = new Entity(texturedModel);
                 this.colorVector = new Vector4f(1,1,1,1);
                 this.shaderProgram = new StaticShader();
                 LOGGER.info("Creating and Loading worked fine");
@@ -66,9 +68,9 @@ public class Main {
             @Override
             public void render(Renderer renderer) {
                 this.shaderProgram.bind();
-                ((StaticShader)this.shaderProgram).setGrayScaleValue(0.75f);
-                ((StaticShader)this.shaderProgram).setColorValue(this.colorVector);
-                renderer.render(this.texturedModel);
+                this.shaderProgram.setGrayScaleValue(0.75f);
+                this.shaderProgram.setColorValue(this.colorVector);
+                renderer.render(this.entity,this.shaderProgram);
                 this.shaderProgram.unbind();
             }
 

@@ -1,7 +1,11 @@
 package lu.innocence.opengl.core;
 
+import lu.innocence.opengl.core.entities.Entity;
+import lu.innocence.opengl.core.maths.Maths;
+import lu.innocence.opengl.core.maths.Matrix4f;
 import lu.innocence.opengl.core.models.RawModel;
 import lu.innocence.opengl.core.models.TexturedModel;
+import lu.innocence.opengl.core.shaders.StaticShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.*;
@@ -31,11 +35,15 @@ public class Renderer {
         GL11.glClearColor(1,0,0,1);
     }
 
-    public void render(TexturedModel texturedModel) {
+    public void render(Entity entity, StaticShader staticShader) {
+        TexturedModel texturedModel = entity.getModel();
         RawModel model = texturedModel.getRawModel();
         GL30.glBindVertexArray(model.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
+        Matrix4f matrix4f = Maths.createTransformationMatrix(entity.getPosition(),
+                entity.getRotationX(),entity.getRotationY(),entity.getRotationZ(),entity.getScale());
+        staticShader.setTransformationValue(matrix4f);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D,texturedModel.getModelTexture().getTextureId());
         GL11.glDrawElements(GL11.GL_TRIANGLES,model.getVertexCount(),GL11.GL_UNSIGNED_INT,0);

@@ -35,6 +35,7 @@ public abstract class ShaderProgram implements ShaderInterface {
         glAttachShader(programId, this.fragmentShaderId);
         bindAttributes();
         this.link();
+        this.getAllUniformLocations();
     }
 
     private int createShader(String shaderCode, int shaderType) throws ShaderException{

@@ -9,7 +9,7 @@ public class Maths {
         matrix.rotate((float)Math.toRadians(rx),new Vector3f(1,0,0),matrix);
         matrix.rotate((float)Math.toRadians(ry),new Vector3f(0,1,0),matrix);
         matrix.rotate((float)Math.toRadians(rz),new Vector3f(1,0,1),matrix);
-        matrix.scale(new Vector3f(rx,ry,rz));
+        matrix.scale(new Vector3f(scale,scale,scale));
         return matrix;
     }
 
