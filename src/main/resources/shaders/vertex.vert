@@ -4,6 +4,8 @@ in vec3 position;
 in vec2 textureCoords;
 // out vec3 colour;
 
+uniform mat4 transformationMatrix;
+
 out vec2 pass_textureCoords;
 
 void main(void)

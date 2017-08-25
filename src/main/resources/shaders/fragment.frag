@@ -3,7 +3,7 @@
 // in vec3 colour;
 in vec2 pass_textureCoords;
 uniform float greyscale;
-uniform vec4 color_manipulation;
+uniform vec4 colorManipulation;
 // out vec4 out_Color;
 
 uniform sampler2D textureSampler;
@@ -16,10 +16,10 @@ void main(void) {
         discard;
     }
 
-    vec4 newColor = vec4(textureColor.r * color_manipulation.r,
-                         textureColor.g * color_manipulation.g,
-                         textureColor.b * color_manipulation.b,
-                         textureColor.a * color_manipulation.a);
+    vec4 newColor = vec4(textureColor.r * colorManipulation.r,
+                         textureColor.g * colorManipulation.g,
+                         textureColor.b * colorManipulation.b,
+                         textureColor.a * colorManipulation.a);
 
     float delta = (newColor.r + newColor.g + newColor.b) / 3;
 

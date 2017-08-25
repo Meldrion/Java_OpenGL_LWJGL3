@@ -2,9 +2,14 @@ package lu.innocence.opengl.core.shaders;
 
 
 import lu.innocence.opengl.core.exception.ShaderException;
+import lu.innocence.opengl.core.maths.Matrix4f;
+import lu.innocence.opengl.core.maths.Vector4f;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -16,9 +21,12 @@ public abstract class ShaderProgram implements ShaderInterface {
     private int vertexShaderId;
     private int fragmentShaderId;
 
-    public ShaderProgram(String vertexShader,String fragmentShader) throws ShaderException {
-        programId = glCreateProgram();
-        if (programId == 0) {
+    private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);;
+
+
+    ShaderProgram(String vertexShader, String fragmentShader) throws ShaderException {
+        this.programId = glCreateProgram();
+        if (this.programId == 0) {
             throw new ShaderException("Could not create Shader");
         }
         this.vertexShaderId = this.createShader(vertexShader,GL_VERTEX_SHADER);
@@ -26,7 +34,7 @@ public abstract class ShaderProgram implements ShaderInterface {
         glAttachShader(programId, this.vertexShaderId);
         glAttachShader(programId, this.fragmentShaderId);
         bindAttributes();
-        link();
+        this.link();
     }
 
     private int createShader(String shaderCode, int shaderType) throws ShaderException{
@@ -46,7 +54,7 @@ public abstract class ShaderProgram implements ShaderInterface {
         return shaderId;
     }
 
-    public void link() throws ShaderException {
+    private void link() throws ShaderException {
         glLinkProgram(programId);
         if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
             throw new ShaderException(String.format("Error linking Shader code: %s" ,
@@ -66,18 +74,28 @@ public abstract class ShaderProgram implements ShaderInterface {
         }
     }
 
-    public void bindAttribute(int attribute,String variableName) {
+    public abstract void getAllUniformLocations();
+
+    int getUniform(String uniformName) {
+        return GL20.glGetUniformLocation(this.programId, uniformName);
+    }
+
+    void bindAttribute(int attribute, String variableName) {
         GL20.glBindAttribLocation(this.programId,attribute,variableName);
     }
 
-    public void setUniformFloat(String uniformName,float value) {
-        int loc = GL20.glGetUniformLocation(this.programId, uniformName);
+    void setUniformFloat(int loc, float value) {
         GL20.glUniform1f(loc,value);
     }
 
-    public void setUniformVec4(String uniformName,float x, float y, float z,  float a) {
-        int loc = GL20.glGetUniformLocation(this.programId,uniformName);
-        GL20.glUniform4f(loc,x,y,z,a);
+    void setUniformVec4(int loc, Vector4f uniform4) {
+        GL20.glUniform4f(loc,uniform4.x,uniform4.y,uniform4.z,uniform4.w);
+    }
+
+    public void setUniformMatrix4(int loc, Matrix4f matrix4f) {
+        matrix4f.store(ShaderProgram.matrixBuffer);
+        ShaderProgram.matrixBuffer.flip();
+        GL20.glUniformMatrix4fv(loc,false,ShaderProgram.matrixBuffer);
     }
 
     public void bind() {
