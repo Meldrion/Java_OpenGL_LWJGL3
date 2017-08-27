@@ -70,6 +70,8 @@ public class Main {
                 this.shaderProgram.bind();
                 this.shaderProgram.setGrayScaleValue(0.75f);
                 this.shaderProgram.setColorValue(this.colorVector);
+                this.entity.increasePosition(0.002f,0,0);
+                this.entity.increaseRotation(0,1,0);
                 renderer.render(this.entity,this.shaderProgram);
                 this.shaderProgram.unbind();
             }
