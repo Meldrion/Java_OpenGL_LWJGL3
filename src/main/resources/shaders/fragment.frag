@@ -4,7 +4,7 @@
 in vec2 pass_textureCoords;
 uniform float greyscale;
 uniform vec4 colorManipulation;
-// out vec4 out_Color;
+out vec4 color;
 
 uniform sampler2D textureSampler;
 
@@ -27,6 +27,6 @@ void main(void) {
     textureColor.g = delta * greyscale + (1-greyscale) * newColor.g;
     textureColor.b = delta * greyscale + (1-greyscale) * newColor.b;
 
-    gl_FragColor = vec4(vec3(textureColor.r,textureColor.g,textureColor.b),1.0);
+    color = vec4(vec3(textureColor.r,textureColor.g,textureColor.b),1.0);
 
 }
