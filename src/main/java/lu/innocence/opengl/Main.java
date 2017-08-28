@@ -1,19 +1,23 @@
 package lu.innocence.opengl;
 
-import lu.innocence.opengl.core.*;
+import lu.innocence.opengl.core.DisplayManager;
+import lu.innocence.opengl.core.Loader;
+import lu.innocence.opengl.core.RenderInterface;
+import lu.innocence.opengl.core.Renderer;
 import lu.innocence.opengl.core.entities.Entity;
 import lu.innocence.opengl.core.exception.GLFWException;
 import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.RawModel;
 import lu.innocence.opengl.core.models.TexturedModel;
-import lu.innocence.opengl.core.shaders.ShaderProgram;
 import lu.innocence.opengl.core.shaders.StaticShader;
 import lu.innocence.opengl.core.texture.ModelTexture;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.nio.file.Paths;
 
 public class Main {
 
@@ -56,8 +60,9 @@ public class Main {
                 URL url = Main.class.getClassLoader().getResource(fileName);
                 if (url == null)
                     throw new FileNotFoundException(fileName);
+                File file = Paths.get(url.toURI()).toFile();
                 ModelTexture texture = new ModelTexture(loader.loadTexture
-                        (url.getFile()));
+                        (file.getAbsolutePath()));
                 TexturedModel texturedModel = new TexturedModel(model,texture);
                 this.entity = new Entity(texturedModel);
                 this.colorVector = new Vector4f(1,1,1,1);
@@ -70,6 +75,8 @@ public class Main {
                 this.shaderProgram.bind();
                 this.shaderProgram.setGrayScaleValue(0.75f);
                 this.shaderProgram.setColorValue(this.colorVector);
+                this.entity.increasePosition(0.002f,0,0);
+                this.entity.increaseRotation(0,1,0);
                 renderer.render(this.entity,this.shaderProgram);
                 this.shaderProgram.unbind();
             }
@@ -87,6 +94,7 @@ public class Main {
             new Main();
         } catch (GLFWException e) {
             LOGGER.error(e);
+            System.exit(-1);
         }
     }
 

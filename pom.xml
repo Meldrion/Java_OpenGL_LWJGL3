@@ -20,12 +20,52 @@
         </plugins>
     </build>
 
-
     <properties>
         <pngdecoder.version>1.0</pngdecoder.version>
         <lwjgl.version>3.1.2</lwjgl.version>
-        <lwjgl.natives>natives-linux</lwjgl.natives>
     </properties>
+
+    <profiles>
+        <!-- WINDOWS -->
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <lwjgl.natives>natives-windows</lwjgl.natives>
+            </properties>
+        </profile>
+        <!-- LINUX -->
+        <profile>
+        <id>linux</id>
+        <activation>
+            <os>
+                <family>linux</family>
+            </os>
+        </activation>
+        <properties>
+            <lwjgl.natives>natives-linux</lwjgl.natives>
+        </properties>
+        </profile>
+
+        <!-- OSX -->
+        <profile>
+        <id>macOSX</id>
+        <activation>
+            <os>
+                <family>mac</family>
+            </os>
+        </activation>
+        <properties>
+            <lwjgl.natives>natives-osx</lwjgl.natives>
+        </properties>
+        </profile>
+    </profiles>
+
+
 
     <dependencies>
         <dependency>
@@ -38,7 +78,7 @@
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
             <version>${lwjgl.version}</version>
-            <classifier>natives-linux</classifier>
+            <classifier>${lwjgl.natives}</classifier>
         </dependency>
 
         <dependency>

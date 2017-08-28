@@ -83,8 +83,8 @@ public class Entity {
 
     public void increaseRotation(float rx,float ry,float rz) {
         this.rotationX += rx;
-        this.rotationX += ry;
-        this.rotationX += rz;
+        this.rotationY += ry;
+        this.rotationZ += rz;
     }
 
 }
