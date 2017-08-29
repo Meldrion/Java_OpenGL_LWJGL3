@@ -3,6 +3,7 @@ package lu.innocence.opengl.core.shaders;
 
 import lu.innocence.opengl.core.exception.ShaderException;
 import lu.innocence.opengl.core.maths.Matrix4f;
+import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector4f;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -87,6 +88,10 @@ public abstract class ShaderProgram implements ShaderInterface {
 
     void setUniformFloat(int loc, float value) {
         GL20.glUniform1f(loc,value);
+    }
+
+    void setUniformVec2(int loc, Vector2f uniform2) {
+        GL20.glUniform2f(loc,uniform2.x,uniform2.y);
     }
 
     void setUniformVec4(int loc, Vector4f uniform4) {

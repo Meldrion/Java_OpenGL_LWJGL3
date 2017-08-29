@@ -6,6 +6,8 @@ import lu.innocence.opengl.core.RenderInterface;
 import lu.innocence.opengl.core.Renderer;
 import lu.innocence.opengl.core.entities.Entity;
 import lu.innocence.opengl.core.exception.GLFWException;
+import lu.innocence.opengl.core.maths.Vector2f;
+import lu.innocence.opengl.core.maths.Vector3f;
 import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.RawModel;
 import lu.innocence.opengl.core.models.TexturedModel;
@@ -65,6 +67,8 @@ public class Main {
                         (file.getAbsolutePath()));
                 TexturedModel texturedModel = new TexturedModel(model,texture);
                 this.entity = new Entity(texturedModel);
+                this.entity.setScale(1);
+                this.entity.setPosition(new Vector3f(640,400,0));
                 this.colorVector = new Vector4f(1,1,1,1);
                 this.shaderProgram = new StaticShader();
                 LOGGER.info("Creating and Loading worked fine");
@@ -75,8 +79,9 @@ public class Main {
                 this.shaderProgram.bind();
                 this.shaderProgram.setGrayScaleValue(0.75f);
                 this.shaderProgram.setColorValue(this.colorVector);
-                this.entity.increasePosition(0.002f,0,0);
-                this.entity.increaseRotation(0,1,0);
+                this.entity.increasePosition(1,0,0);
+                //this.entity.increaseRotation(0,1,0);
+
                 renderer.render(this.entity,this.shaderProgram);
                 this.shaderProgram.unbind();
             }

@@ -2,6 +2,7 @@ package lu.innocence.opengl.core.shaders;
 
 import lu.innocence.opengl.Utils;
 import lu.innocence.opengl.core.maths.Matrix4f;
+import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector4f;
 
 public class StaticShader extends ShaderProgram implements ShaderInterface {
@@ -30,6 +31,10 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
 
     public void setTransformationValue(Matrix4f matrix) {
         super.setUniformMatrix4(this.transformationMatrixLocation,matrix);
+    }
+
+    public void setScreenSizeValue(Vector2f screenSize) {
+
     }
 
     @Override
