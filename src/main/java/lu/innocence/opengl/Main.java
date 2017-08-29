@@ -27,25 +27,6 @@ public class Main {
 
     private Main() throws GLFWException {
 
-        float[] vertices = {
-                -0.5f,  0.5f, 0.0f, // V0
-                -0.5f, -0.5f, 0.0f, // V1
-                0.5f,  -0.5f, 0.0f, // V2
-                0.5f,  0.5f, 0.0f // V3
-        };
-
-        int [] indices = {
-                0,1,3, // Top Left Triangle (V0,V1,V3)
-                3,1,2 // Bottom Right Triangle (V3,V1,V2)
-        };
-
-        float [] textureCoords = {
-                0,0,
-                0,1,
-                1,1,
-                1,0
-        };
-
         DisplayManager displayManager = new DisplayManager();
         displayManager.run(new RenderInterface() {
 
@@ -57,18 +38,18 @@ public class Main {
             @Override
             public void create() throws Exception {
                 this.loader = new Loader();
-                RawModel model = loader.loadToVAO(vertices,textureCoords,indices);
                 String fileName = "textures/chara.png";
                 URL url = Main.class.getClassLoader().getResource(fileName);
                 if (url == null)
                     throw new FileNotFoundException(fileName);
                 File file = Paths.get(url.toURI()).toFile();
-                ModelTexture texture = new ModelTexture(loader.loadTexture
-                        (file.getAbsolutePath()));
-                TexturedModel texturedModel = new TexturedModel(model,texture);
+                int[] textureDetails = loader.loadTexture
+                        (file.getAbsolutePath());
+                ModelTexture texture = new ModelTexture(textureDetails[0],textureDetails[1],textureDetails[2]);
+                TexturedModel texturedModel = new TexturedModel(loader,texture);
                 this.entity = new Entity(texturedModel);
                 this.entity.setScale(1);
-                this.entity.setPosition(new Vector3f(640,400,0));
+                this.entity.setPosition(new Vector3f(0,0,0));
                 this.colorVector = new Vector4f(1,1,1,1);
                 this.shaderProgram = new StaticShader();
                 LOGGER.info("Creating and Loading worked fine");
@@ -79,8 +60,7 @@ public class Main {
                 this.shaderProgram.bind();
                 this.shaderProgram.setGrayScaleValue(0.75f);
                 this.shaderProgram.setColorValue(this.colorVector);
-                this.entity.increasePosition(1,0,0);
-                //this.entity.increaseRotation(0,1,0);
+                this.entity.increasePosition(1,1,0);
 
                 renderer.render(this.entity,this.shaderProgram);
                 this.shaderProgram.unbind();

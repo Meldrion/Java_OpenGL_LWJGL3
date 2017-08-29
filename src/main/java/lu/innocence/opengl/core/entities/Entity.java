@@ -45,8 +45,8 @@ public class Entity {
 
     public void setPosition(Vector3f position) {
         this.positionScreenCoords = new Vector3f(position);
-        position.set((position.x / 1280.0f * 2 + (640.0f / 1280.0f) - 1.0f),
-                (-position.y / 800.0f * 2 - (400.0f / 800.0f) + 1.0f),
+        position.set((position.x / 1280.0f * 2 + (256.0f / 1280.0f) - 1.0f),
+                (-position.y / 800.0f * 2 - (256.0f / 800.0f) + 1.0f),
                 position.z);
         this.position = position;
     }

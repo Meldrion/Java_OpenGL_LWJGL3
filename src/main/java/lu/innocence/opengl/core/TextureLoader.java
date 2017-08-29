@@ -16,7 +16,7 @@ public class TextureLoader {
 
     private TextureLoader() {}
 
-    public static int loadTexture(String fileName) throws IOException {
+    public static int[] loadTexture(String fileName) throws IOException {
         // Load Texture file
         PNGDecoder decoder = new PNGDecoder(new FileInputStream(fileName));
 
@@ -34,9 +34,6 @@ public class TextureLoader {
         // Tell OpenGL how to unpack the RGBA bytes. Each component is 1 byte size
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);*/
-
         //Setup wrap mode
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
@@ -49,12 +46,11 @@ public class TextureLoader {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0,
                 GL_RGBA, GL_UNSIGNED_BYTE, buf);
 
-        // Generate Mip Map
-        /*
-        glGenerateMipmap(GL_TEXTURE_2D);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -0.4f);
-        */
-        return textureId;
+
+        int[] returnValue = new int[3];
+        returnValue[0] = textureId;
+        returnValue[1] = decoder.getWidth();
+        returnValue[2] = decoder.getHeight();
+        return returnValue;
     }
 }

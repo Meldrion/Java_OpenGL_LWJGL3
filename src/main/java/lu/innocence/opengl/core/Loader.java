@@ -39,15 +39,17 @@ public class Loader {
         return new RawModel(voaID,indices.length);
     }
 
-    public int loadTexture(String filename) {
-        int texture;
+    public int[] loadTexture(String filename) {
+        int texture[];
         try {
             texture = TextureLoader.loadTexture(filename);
         } catch (IOException e) {
             LOGGER.error(e);
-            return 0;
+            int[] returnValue = new int[0];
+            returnValue[0] = 0;
+            return returnValue;
         }
-        this.textures.add(texture);
+        this.textures.add(texture[0]);
         return texture;
     }
 
