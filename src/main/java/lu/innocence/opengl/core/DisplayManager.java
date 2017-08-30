@@ -1,10 +1,12 @@
 package lu.innocence.opengl.core;
 
 import lu.innocence.opengl.core.exception.GLFWException;
+import lu.innocence.opengl.core.maths.Vector2f;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
@@ -20,12 +22,15 @@ public class DisplayManager {
 
     private static final Logger LOGGER = LogManager.getLogger(DisplayManager.class);
     private long window;
+    private static Vector2f windowSize;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Renderer renderer;
     private RenderInterface renderInterface;
 
     private void init(int width,int height) throws GLFWException {
+
+        DisplayManager.setWindowSize(width,height);
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
         if (!glfwInit())
@@ -65,6 +70,15 @@ public class DisplayManager {
             );
         } // the stack frame is popped automatically
 
+        // Resize Callback
+        glfwSetWindowSizeCallback(window,new GLFWWindowSizeCallback(){
+            @Override
+            public void invoke(long window, int width, int height) {
+                DisplayManager.setWindowSize(width,height);
+            }
+
+        });
+
         // Make the OpenGL context current
         glfwMakeContextCurrent(window);
         // Enable v-sync
@@ -100,15 +114,13 @@ public class DisplayManager {
         glfwSwapInterval(1);
         glfwMakeContextCurrent(this.window);
 
-        /*glViewport(0, 0,width,height);*/
-
         this.renderer = new Renderer();
         renderer.prepare();
 
         try {
             this.renderInterface.create();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             System.exit(-1);
         }
 
@@ -128,6 +140,14 @@ public class DisplayManager {
             // invoked during this call.
             glfwPollEvents();
         }
+    }
+
+    public static Vector2f getWindowSize() {
+        return windowSize;
+    }
+
+    public static void setWindowSize(int width,int height) {
+        DisplayManager.windowSize = new Vector2f(width,height);
     }
 
 }

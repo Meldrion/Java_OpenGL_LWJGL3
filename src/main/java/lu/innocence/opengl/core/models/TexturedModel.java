@@ -25,8 +25,9 @@ public class TexturedModel {
     };
 
     public TexturedModel(Loader loader, ModelTexture modelTexture) {
-        float w = modelTexture.getWidth() / 1280f;
-        float h = modelTexture.getHeight() / 800f;
+        this.dimension = new Vector2f(modelTexture.getWidth(),modelTexture.getHeight());
+        float w = modelTexture.getWidth() / 1280f * 2;
+        float h = modelTexture.getHeight() / 800f * 2;
         this.vertices = new float[]{
                     -0.5f * w,  0.5f * h, 0.0f, // V0
                     -0.5f * w, -0.5f * h, 0.0f, // V1
@@ -43,5 +44,13 @@ public class TexturedModel {
 
     public ModelTexture getModelTexture() {
         return modelTexture;
+    }
+
+    public void setDimension(Vector2f dimension) {
+        this.dimension = dimension;
+    }
+
+    public Vector2f getDimension() {
+        return dimension;
     }
 }

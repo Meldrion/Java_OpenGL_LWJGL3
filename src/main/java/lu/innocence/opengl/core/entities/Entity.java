@@ -1,6 +1,9 @@
 package lu.innocence.opengl.core.entities;
 
+import lu.innocence.opengl.core.DisplayManager;
+import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector3f;
+import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.TexturedModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +17,7 @@ public class Entity {
     private float rotationY;
     private float rotationZ;
     private float scale;
-    private Vector3f positionScreenCoords;
+    private Vector4f uvCoords;
 
     public Entity(TexturedModel model) {
         this(model, new Vector3f(0, 0, 0), 0, 0, 0, 1);
@@ -23,6 +26,7 @@ public class Entity {
     public Entity(TexturedModel model, Vector3f position,
                   float rotationX, float rotationY, float rotationZ,
                   float scale) {
+        this.uvCoords = new Vector4f(0,0,1,1);
         this.setModel(model);
         this.setPosition(position);
         this.setRotationX(rotationX);
@@ -44,10 +48,6 @@ public class Entity {
     }
 
     public void setPosition(Vector3f position) {
-        this.positionScreenCoords = new Vector3f(position);
-        position.set((position.x / 1280.0f * 2 + (256.0f / 1280.0f) - 1.0f),
-                (-position.y / 800.0f * 2 - (256.0f / 800.0f) + 1.0f),
-                position.z);
         this.position = position;
     }
 
@@ -84,15 +84,19 @@ public class Entity {
     }
 
     public void increasePosition(float dx, float dy, float dz) {
-        this.setPosition(new Vector3f(this.positionScreenCoords.x + dx,
-                this.positionScreenCoords.y + dy,
-                this.positionScreenCoords.z + dz));
+        this.position.x += dx;
+        this.position.y += dy;
+        this.position.z += dz;
     }
 
     public void increaseRotation(float rx, float ry, float rz) {
         this.rotationX += rx;
         this.rotationY += ry;
         this.rotationZ += rz;
+    }
+
+    public void setUvCoords(int x1,int y1,int x2,int y2) {
+
     }
 
 }
