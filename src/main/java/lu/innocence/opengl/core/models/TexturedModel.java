@@ -28,11 +28,18 @@ public class TexturedModel {
         this.dimension = new Vector2f(modelTexture.getWidth(),modelTexture.getHeight());
         float w = modelTexture.getWidth() / 1280f * 2;
         float h = modelTexture.getHeight() / 800f * 2;
+        /*
         this.vertices = new float[]{
                     -0.5f * w,  0.5f * h, 0.0f, // V0
                     -0.5f * w, -0.5f * h, 0.0f, // V1
                     0.5f * w,  -0.5f * h, 0.0f, // V2
                     0.5f * w,  0.5f * h, 0.0f // V3
+        };*/
+        this.vertices = new float[]{
+                -1.0f ,   1.0f , 0.0f, // V0
+                -1.0f ,   0.0f , 0.0f, // V1
+                 0.0f  ,  0.0f , 0.0f, // V2
+                 0.0f  ,  1.0f , 0.0f // V3
         };
         this.rawModel = loader.loadToVAO(vertices,textureCoords,indices);
         this.modelTexture = modelTexture;

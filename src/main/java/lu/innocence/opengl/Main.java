@@ -47,7 +47,7 @@ public class Main {
                 TexturedModel texturedModel = new TexturedModel(loader, texture);
                 this.entity = new Entity(texturedModel);
                 this.entity.setScale(1.0f);
-                this.entity.setPosition(new Vector3f(0, 0, 0));
+                this.entity.setPosition(new Vector3f(-0.5f, 0.0f, 0));
                 this.colorVector = new Vector4f(1, 1, 1, 1);
                 this.shaderProgram = new StaticShader();
                 LOGGER.info("Creating and Loading worked fine");
@@ -58,8 +58,6 @@ public class Main {
                 this.shaderProgram.bind();
                 this.shaderProgram.setGrayScaleValue(0.75f);
                 this.shaderProgram.setColorValue(this.colorVector);
-                //this.entity.increasePosition(1, 1, 0);
-                //this.entity.increaseRotation(0,0,1);
                 renderer.render(this.entity, this.shaderProgram);
                 this.shaderProgram.unbind();
             }
@@ -69,7 +67,7 @@ public class Main {
                 this.loader.cleanUp();
             }
 
-        }, 1280, 800);
+        }, 1280, 800,"OpenGL Test");
     }
 
     public static void main(String[] args) {

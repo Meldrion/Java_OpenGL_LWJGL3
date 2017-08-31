@@ -28,7 +28,7 @@ public class DisplayManager {
     private Renderer renderer;
     private RenderInterface renderInterface;
 
-    private void init(int width,int height) throws GLFWException {
+    private void init(int width,int height, String title) throws GLFWException {
 
         DisplayManager.setWindowSize(width,height);
 
@@ -47,7 +47,7 @@ public class DisplayManager {
 
 
         // Create the window
-        this.window = glfwCreateWindow(width, height, "Hello World!", NULL, NULL);
+        this.window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (this.window == NULL)
             throw new GLFWException("Failed to create the GLFW window");
 
@@ -68,6 +68,9 @@ public class DisplayManager {
                     (vidmode.width() - pWidth.get(0)) / 2,
                     (vidmode.height() - pHeight.get(0)) / 2
             );
+
+            //glViewport(0,0,width,height);
+
         } // the stack frame is popped automatically
 
         // Resize Callback
@@ -75,6 +78,7 @@ public class DisplayManager {
             @Override
             public void invoke(long window, int width, int height) {
                 DisplayManager.setWindowSize(width,height);
+                glViewport(0,0,width,height);
             }
 
         });
@@ -86,13 +90,13 @@ public class DisplayManager {
 
     }
 
-    public void run(RenderInterface renderInterface,int width,int height) throws GLFWException {
+    public void run(RenderInterface renderInterface,int width,int height,String title) throws GLFWException {
 
         LOGGER.info("LWJGL - {} ",Version.getVersion());
 
         this.renderInterface = renderInterface;
 
-        init(width,height);
+        init(width,height,title);
         loop(width,height);
 
         // Free the window callbacks and destroy the window
