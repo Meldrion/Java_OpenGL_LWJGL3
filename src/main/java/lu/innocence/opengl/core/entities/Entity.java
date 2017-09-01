@@ -108,10 +108,12 @@ public class Entity {
     }
 
     public Vector2f getDimension() {
-/*        float uDelta = this.uvCoords.getW() - this.uvCoords.getX();
-        float vDelta = this.uvCoords.getZ() - this.uvCoords.getY();*/
-        return new Vector2f(this.getModel().getDimension().getX(),
-                            this.getModel().getDimension().getY());
+
+        float uDelta = this.uvCoords.getZ() - this.uvCoords.getX();
+        float vDelta = this.uvCoords.getW() - this.uvCoords.getY();
+
+        return new Vector2f(this.getModel().getDimension().getX() * uDelta,
+                            this.getModel().getDimension().getY() * vDelta);
     }
 
 }
