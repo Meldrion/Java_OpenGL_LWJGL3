@@ -23,9 +23,9 @@ void main(void) {
 
     float delta = (newColor.r + newColor.g + newColor.b) / 3;
 
-    textureColor.r = delta * greyscale + (1-greyscale) * newColor.r;
-    textureColor.g = delta * greyscale + (1-greyscale) * newColor.g;
-    textureColor.b = delta * greyscale + (1-greyscale) * newColor.b;
+    textureColor.r = delta * greyscale + ((1-greyscale) * newColor.r);
+    textureColor.g = delta * greyscale + ((1-greyscale) * newColor.g);
+    textureColor.b = delta * greyscale + ((1-greyscale) * newColor.b);
 
     color = vec4(vec3(textureColor.r,textureColor.g,textureColor.b),1.0);
 

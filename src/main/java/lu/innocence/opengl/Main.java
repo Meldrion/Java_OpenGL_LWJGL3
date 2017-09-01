@@ -47,7 +47,7 @@ public class Main {
                 TexturedModel texturedModel = new TexturedModel(loader, texture);
                 this.entity = new Entity(texturedModel);
                 this.entity.setScale(1.0f);
-                this.entity.setPosition(new Vector3f(0.0f, 0.0f, 0));
+                this.entity.setPosition(new Vector3f(32.0f, 32.0f, 0));
                 this.entity.setUVCoords(128,0,160,48);
                 this.colorVector = new Vector4f(1, 1, 1, 1);
                 this.shaderProgram = new StaticShader();
