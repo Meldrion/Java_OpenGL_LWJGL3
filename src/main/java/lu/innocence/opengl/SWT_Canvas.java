@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import org.lwjgl.opengl.GL;
 //import org.lwjgl.opengl.GLContext;
 
+import static lu.innocence.opengl.core.FrameHandler.watchRenderTime;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glViewport;
 
@@ -86,7 +87,7 @@ public abstract class SWT_Canvas {
                     delta = afterRendering - beforeRenderingTime;
 
                     display.asyncExec(this);
-                    FrameHandler.watchRenderTime(delta);
+                    watchRenderTime(delta);
                 }
             }
         };
@@ -96,7 +97,7 @@ public abstract class SWT_Canvas {
         Rectangle bounds = canvas.getBounds();
         rect.width = bounds.width;
         rect.height = bounds.height;
-        DisplayManager.setWindowSize(rect.x,rect.y);
+        DisplayManager.setWindowSize(rect.width,rect.height);
         glViewport(0,0,rect.width,rect.height);
     }
 
@@ -105,5 +106,6 @@ public abstract class SWT_Canvas {
     Canvas getCanvasHandle() {
         return this.canvas;
     }
+
 
 }
