@@ -1,9 +1,9 @@
-package lu.innocence.testgame;
+package lu.innocence.lu.innocence.testing;
 
 import lu.innocence.opengl.Main;
+import lu.innocence.opengl.SWT_Canvas;
 import lu.innocence.opengl.core.DisplayManager;
 import lu.innocence.opengl.core.Loader;
-import lu.innocence.opengl.core.RenderInterface;
 import lu.innocence.opengl.core.Renderer;
 import lu.innocence.opengl.core.entities.Entity;
 import lu.innocence.opengl.core.maths.Vector2f;
@@ -12,30 +12,28 @@ import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.TexturedModel;
 import lu.innocence.opengl.core.shaders.StaticShader;
 import lu.innocence.opengl.core.texture.ModelTexture;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.file.Paths;
 
-public class TestGame implements RenderInterface {
-
-    private static final Logger LOGGER = LogManager.getLogger(TestGame.class);
-    private final DisplayManager displayManager;
+/**
+ * Created by Fabien Steines on 02.09.2017.
+ */
+@SuppressWarnings("Duplicates")
+public class TestCanvas extends SWT_Canvas {
 
     private Loader loader;
     private Entity entity;
     private StaticShader shaderProgram;
     private Vector4f colorVector;
 
-    public TestGame(DisplayManager displayManager) {
-        this.displayManager = displayManager;
-    }
+    public TestCanvas(Display display, Composite parent) throws Exception {
+        super(display, parent);
 
-    @Override
-    public void create() throws Exception {
         this.loader = new Loader();
         String fileName = "textures/cave.png";
         URL url = Main.class.getClassLoader().getResource(fileName);
@@ -50,15 +48,15 @@ public class TestGame implements RenderInterface {
         this.entity.setScale(1.0f);
         this.entity.setPosition(new Vector3f(0f, 0f, 0));
         this.entity.setUVCoords(0, 0, 32, 32);
-        this.colorVector = new Vector4f(1, 1, 1, 1);
+        this.colorVector = new Vector4f(1f, 1, 1, 1);
         this.shaderProgram = new StaticShader();
-        LOGGER.info("Creating and Loading worked fine");
+
     }
 
     @Override
-    public void render(Renderer renderer) {
+    public void render(long delta,Renderer renderer) {
         this.shaderProgram.bind();
-        this.shaderProgram.setGrayScaleValue(0.75f);
+        this.shaderProgram.setGrayScaleValue(0f);
         this.shaderProgram.setColorValue(this.colorVector);
         this.shaderProgram.setTextureDisabled(false);
 
@@ -98,6 +96,7 @@ public class TestGame implements RenderInterface {
         renderer.unbindTexture();
         this.shaderProgram.setTextureDisabled(true);
 
+        /*
         Vector2f position = displayManager.getCursorPosition();
         this.entity.setPosition(new Vector3f((int) (position.getX() / (32 * scale)) * (32 * scale),
                 (int) (position.getY() / (32 * scale)) * (32 * scale),
@@ -106,16 +105,10 @@ public class TestGame implements RenderInterface {
         this.shaderProgram.setGrayScaleValue(0f);
         this.shaderProgram.setColorValue(new Vector4f(1, 0, 0, 0.5f));
         renderer.render(entity, this.shaderProgram);
-
+        */
         this.shaderProgram.unbind();
 
         renderer.unbindVertexArray();
     }
-
-    @Override
-    public void destroy() {
-        this.loader.cleanUp();
-    }
-
 
 }

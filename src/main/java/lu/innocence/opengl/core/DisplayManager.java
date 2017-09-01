@@ -25,7 +25,6 @@ public class DisplayManager {
     private static final Logger LOGGER = LogManager.getLogger(DisplayManager.class);
     private long window;
     private static Vector2f windowSize;
-    private static final int MIN_RENDER_TIME = 16;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Renderer renderer;
@@ -150,28 +149,7 @@ public class DisplayManager {
             // Get Delta Value and Pause the rendering if needed
             long afterRendering = System.currentTimeMillis();
             delta = afterRendering - beforeRenderingTime;
-            this.watchRenderTime(delta);
-        }
-    }
-
-    private void watchRenderTime(long delta) {
-        // Dont use to much CPU
-        if (delta < MIN_RENDER_TIME) {
-            try {
-                Thread.sleep(MIN_RENDER_TIME - delta);
-            } catch (InterruptedException e) {
-                LOGGER.error(e);
-                Thread.currentThread().interrupt();
-            }
-        }
-        // Frame Skipping
-        if (delta > MIN_RENDER_TIME) {
-            try {
-                Thread.sleep(delta - MIN_RENDER_TIME);
-            } catch (InterruptedException e) {
-                LOGGER.error(e);
-                Thread.currentThread().interrupt();
-            }
+            FrameHandler.watchRenderTime(delta);
         }
     }
 
