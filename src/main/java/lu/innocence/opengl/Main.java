@@ -49,7 +49,7 @@ public class Main {
                 this.entity = new Entity(texturedModel);
                 this.entity.setScale(1.0f);
                 this.entity.setPosition(new Vector3f(0f, 0f, 0));
-                this.entity.setUVCoords(0,0,32,32);
+                this.entity.setUVCoords(0, 0, 32, 32);
                 this.colorVector = new Vector4f(1, 1, 1, 1);
                 this.shaderProgram = new StaticShader();
                 LOGGER.info("Creating and Loading worked fine");
@@ -60,49 +60,56 @@ public class Main {
                 this.shaderProgram.bind();
                 this.shaderProgram.setGrayScaleValue(0.75f);
                 this.shaderProgram.setColorValue(this.colorVector);
+                this.shaderProgram.setTextureDisabled(false);
 
+                renderer.bindVertexArray(this.entity);
                 renderer.bindTexture(this.entity);
 
-                for (int i=0;i<DisplayManager.getWindowSize().getX()/32;i++) {
-                    for (int j=0;j<DisplayManager.getWindowSize().getY()/32;j++) {
+                float scale = 0.5f;
+                for (int i = 0; i < DisplayManager.getWindowSize().getX() / (32 * scale); i++) {
+                    for (int j = 0; j < DisplayManager.getWindowSize().getY() / (32 * scale); j++) {
 
-                        for (int z=0;z<4;z++) {
+                        for (int z = 0; z < 4; z++) {
                             switch (z) {
                                 case 0:
-                                    this.entity.setUVCoords(0,0,32,32);
+                                    this.entity.setUVCoords(0, 0, 32, 32);
                                     break;
                                 case 1:
-                                    this.entity.setUVCoords(32,0,64,32);
+                                    this.entity.setUVCoords(32, 0, 64, 32);
                                     break;
                                 case 2:
-                                    this.entity.setUVCoords(32,32,64,64);
+                                    this.entity.setUVCoords(32, 32, 64, 64);
                                     break;
                                 case 3:
-                                    this.entity.setUVCoords(64,32,96,64);
+                                    this.entity.setUVCoords(64, 32, 96, 64);
                                     break;
                                 default:
                                     break;
                             }
 
-                            this.entity.setPosition(new Vector3f(i * 32.0f,j * 32.0f,0f));
+                            this.entity.setScale(scale);
+                            this.entity.setPosition(new Vector3f(i * 32.0f * scale, j * 32.0f * scale, 0f));
                             renderer.render(this.entity, this.shaderProgram);
                         }
 
                     }
                 }
 
-
                 renderer.unbindTexture();
+                this.shaderProgram.setTextureDisabled(true);
 
                 Vector2f position = displayManager.getCursorPosition();
-                this.entity.setPosition(new Vector3f((int)(position.getX()/32) * 32,
-                        (int)(position.getY()/32) * 32,
+                this.entity.setPosition(new Vector3f((int) (position.getX() / (32 * scale)) * (32 * scale),
+                        (int) (position.getY() / (32 * scale)) * (32 * scale),
                         0));
 
-                this.shaderProgram.setColorValue(new Vector4f(1,0,0,1));
-                renderer.render(entity,this.shaderProgram);
+                this.shaderProgram.setGrayScaleValue(0f);
+                this.shaderProgram.setColorValue(new Vector4f(1, 0, 0, 0.5f));
+                renderer.render(entity, this.shaderProgram);
 
                 this.shaderProgram.unbind();
+
+                renderer.unbindVertexArray();
             }
 
             @Override
@@ -110,7 +117,7 @@ public class Main {
                 this.loader.cleanUp();
             }
 
-        }, 1280, 800,"OpenGL Test");
+        }, 1280, 800, "OpenGL Test");
     }
 
 

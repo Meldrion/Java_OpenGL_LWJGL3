@@ -15,6 +15,7 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
     private int colorLocation;
     private int transformationMatrixLocation;
     private int uvLocation;
+    private int disableTextureLocation;
 
     public StaticShader() throws Exception {
         super(Utils.loadResource("/shaders/vertex.vert"),
@@ -42,13 +43,16 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
         super.setUniformVec4(this.uvLocation,uvCoordinates);
     }
 
+    public void setTextureDisabled(boolean flag) {
+        super.setUniformBoolean(this.disableTextureLocation,flag);
+    }
+
     @Override
     public void getAllUniformLocations() {
         this.greyScaleUniformLocation = this.getUniform("greyscale");
         this.colorLocation = this.getUniform("colorManipulation");
         this.transformationMatrixLocation = this.getUniform("transformationMatrix");
         this.uvLocation = this.getUniform("uvCoordinates");
-
-        LOGGER.info(this.uvLocation);
+        this.disableTextureLocation = this.getUniform("disableTexture");
     }
 }

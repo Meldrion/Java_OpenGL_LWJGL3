@@ -104,6 +104,10 @@ public abstract class ShaderProgram implements ShaderInterface {
         GL20.glUniformMatrix4fv(loc,false,ShaderProgram.matrixBuffer);
     }
 
+    public void setUniformBoolean(int loc,boolean value) {
+        GL20.glUniform1i(loc,value ? 1 : 0);
+    }
+
     public void bind() {
         glUseProgram(programId);
     }
