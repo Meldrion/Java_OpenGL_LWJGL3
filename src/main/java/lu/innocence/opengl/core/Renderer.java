@@ -38,18 +38,31 @@ public class Renderer {
     public void render(Entity entity, StaticShader staticShader) {
         TexturedModel texturedModel = entity.getModel();
         RawModel model = texturedModel.getRawModel();
+
         GL30.glBindVertexArray(model.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
+
         Matrix4f matrix4f = Maths.createTransformationMatrix(entity);
         staticShader.setUVCoordinates(entity.getUVCoords());
         staticShader.setTransformationValue(matrix4f);
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D,texturedModel.getModelTexture().getTextureId());
+
+
         GL11.glDrawElements(GL11.GL_TRIANGLES,model.getVertexCount(),GL11.GL_UNSIGNED_INT,0);
+
+        GL30.glBindVertexArray(0);
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
-        GL30.glBindVertexArray(0);
+
+    }
+
+    public void bindTexture(Entity entity) {
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,entity.getModel().getModelTexture().getTextureId());
+    }
+
+    public void unbindTexture() {
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,0);
     }
 
 }

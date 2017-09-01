@@ -4,12 +4,14 @@ import lu.innocence.opengl.core.exception.GLFWException;
 import lu.innocence.opengl.core.maths.Vector2f;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
+import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -23,6 +25,7 @@ public class DisplayManager {
     private static final Logger LOGGER = LogManager.getLogger(DisplayManager.class);
     private long window;
     private static Vector2f windowSize;
+    private static final int MIN_RENDER_TIME = 16;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Renderer renderer;
@@ -68,8 +71,6 @@ public class DisplayManager {
                     (vidmode.width() - pWidth.get(0)) / 2,
                     (vidmode.height() - pHeight.get(0)) / 2
             );
-
-            //glViewport(0,0,width,height);
 
         } // the stack frame is popped automatically
 
@@ -130,10 +131,12 @@ public class DisplayManager {
 
         // Make the window visible
         glfwShowWindow(this.window);
+        long delta;
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while ( !glfwWindowShouldClose(window) ) {
+            long beforeRenderingTime = System.currentTimeMillis();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
             if (this.renderInterface != null)
@@ -143,6 +146,32 @@ public class DisplayManager {
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
+
+            // Get Delta Value and Pause the rendering if needed
+            long afterRendering = System.currentTimeMillis();
+            delta = afterRendering - beforeRenderingTime;
+            this.watchRenderTime(delta);
+        }
+    }
+
+    private void watchRenderTime(long delta) {
+        // Dont use to much CPU
+        if (delta < MIN_RENDER_TIME) {
+            try {
+                Thread.sleep(MIN_RENDER_TIME - delta);
+            } catch (InterruptedException e) {
+                LOGGER.error(e);
+                Thread.currentThread().interrupt();
+            }
+        }
+        // Frame Skipping
+        if (delta > MIN_RENDER_TIME) {
+            try {
+                Thread.sleep(delta - MIN_RENDER_TIME);
+            } catch (InterruptedException e) {
+                LOGGER.error(e);
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -152,6 +181,16 @@ public class DisplayManager {
 
     public static void setWindowSize(int width,int height) {
         DisplayManager.windowSize = new Vector2f(width,height);
+    }
+
+    public Vector2f getCursorPosition() {
+        DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
+        DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
+        glfwGetCursorPos(this.window, xBuffer, yBuffer);
+        float x = (float) xBuffer.get(0);
+        float y = (float) yBuffer.get(0);
+
+        return new Vector2f(x,y);
     }
 
 }

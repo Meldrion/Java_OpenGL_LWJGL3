@@ -6,6 +6,7 @@ import lu.innocence.opengl.core.RenderInterface;
 import lu.innocence.opengl.core.Renderer;
 import lu.innocence.opengl.core.entities.Entity;
 import lu.innocence.opengl.core.exception.GLFWException;
+import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector3f;
 import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.TexturedModel;
@@ -36,7 +37,7 @@ public class Main {
             @Override
             public void create() throws Exception {
                 this.loader = new Loader();
-                String fileName = "textures/chara.png";
+                String fileName = "textures/cave.png";
                 URL url = Main.class.getClassLoader().getResource(fileName);
                 if (url == null)
                     throw new FileNotFoundException(fileName);
@@ -47,8 +48,8 @@ public class Main {
                 TexturedModel texturedModel = new TexturedModel(loader, texture);
                 this.entity = new Entity(texturedModel);
                 this.entity.setScale(1.0f);
-                this.entity.setPosition(new Vector3f(32.0f, 32.0f, 0));
-                this.entity.setUVCoords(128,0,160,48);
+                this.entity.setPosition(new Vector3f(0f, 0f, 0));
+                this.entity.setUVCoords(0,0,32,32);
                 this.colorVector = new Vector4f(1, 1, 1, 1);
                 this.shaderProgram = new StaticShader();
                 LOGGER.info("Creating and Loading worked fine");
@@ -59,9 +60,48 @@ public class Main {
                 this.shaderProgram.bind();
                 this.shaderProgram.setGrayScaleValue(0.75f);
                 this.shaderProgram.setColorValue(this.colorVector);
-                //this.shaderProgram.
-                //this.entity.increasePosition(1,1,0);
-                renderer.render(this.entity, this.shaderProgram);
+
+                renderer.bindTexture(this.entity);
+
+                for (int i=0;i<DisplayManager.getWindowSize().getX()/32;i++) {
+                    for (int j=0;j<DisplayManager.getWindowSize().getY()/32;j++) {
+
+                        for (int z=0;z<4;z++) {
+                            switch (z) {
+                                case 0:
+                                    this.entity.setUVCoords(0,0,32,32);
+                                    break;
+                                case 1:
+                                    this.entity.setUVCoords(32,0,64,32);
+                                    break;
+                                case 2:
+                                    this.entity.setUVCoords(32,32,64,64);
+                                    break;
+                                case 3:
+                                    this.entity.setUVCoords(64,32,96,64);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            this.entity.setPosition(new Vector3f(i * 32.0f,j * 32.0f,0f));
+                            renderer.render(this.entity, this.shaderProgram);
+                        }
+
+                    }
+                }
+
+
+                renderer.unbindTexture();
+
+                Vector2f position = displayManager.getCursorPosition();
+                this.entity.setPosition(new Vector3f((int)(position.getX()/32) * 32,
+                        (int)(position.getY()/32) * 32,
+                        0));
+
+                this.shaderProgram.setColorValue(new Vector4f(1,0,0,1));
+                renderer.render(entity,this.shaderProgram);
+
                 this.shaderProgram.unbind();
             }
 
@@ -72,6 +112,7 @@ public class Main {
 
         }, 1280, 800,"OpenGL Test");
     }
+
 
     public static void main(String[] args) {
         try {

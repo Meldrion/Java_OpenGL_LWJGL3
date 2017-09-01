@@ -33,6 +33,8 @@ public class Entity {
         this.setRotationY(rotationY);
         this.setRotationZ(rotationZ);
         this.setScale(scale);
+
+        LOGGER.info("Created Entity");
     }
 
     public TexturedModel getModel() {
