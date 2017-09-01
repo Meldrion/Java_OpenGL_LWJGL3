@@ -4,12 +4,17 @@ import lu.innocence.opengl.Utils;
 import lu.innocence.opengl.core.maths.Matrix4f;
 import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector4f;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class StaticShader extends ShaderProgram implements ShaderInterface {
+
+    private static final Logger LOGGER = LogManager.getLogger(StaticShader.class);
 
     private int greyScaleUniformLocation;
     private int colorLocation;
     private int transformationMatrixLocation;
+    private int uvLocation;
 
     public StaticShader() throws Exception {
         super(Utils.loadResource("/shaders/vertex.vert"),
@@ -33,8 +38,8 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
         super.setUniformMatrix4(this.transformationMatrixLocation,matrix);
     }
 
-    public void setScreenSizeValue(Vector2f screenSize) {
-
+    public void setUVCoordinates(Vector4f uvCoordinates) {
+        super.setUniformVec4(this.uvLocation,uvCoordinates);
     }
 
     @Override
@@ -42,5 +47,8 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
         this.greyScaleUniformLocation = this.getUniform("greyscale");
         this.colorLocation = this.getUniform("colorManipulation");
         this.transformationMatrixLocation = this.getUniform("transformationMatrix");
+        this.uvLocation = this.getUniform("uvCoordinates");
+
+        LOGGER.info(this.uvLocation);
     }
 }

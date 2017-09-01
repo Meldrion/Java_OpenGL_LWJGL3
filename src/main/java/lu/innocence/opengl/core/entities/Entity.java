@@ -95,8 +95,23 @@ public class Entity {
         this.rotationZ += rz;
     }
 
-    public void setUvCoords(int x1,int y1,int x2,int y2) {
+    public void setUVCoords(int x1,int y1,int x2,int y2) {
+        Vector2f dimension = this.model.getDimension();
+        this.uvCoords.set(x1 / dimension.getX(),
+                          y1 / dimension.getY(),
+                          x2 / dimension.getX(),
+                          y2 / dimension.getY());
+    }
 
+    public Vector4f getUVCoords() {
+        return this.uvCoords;
+    }
+
+    public Vector2f getDimension() {
+/*        float uDelta = this.uvCoords.getW() - this.uvCoords.getX();
+        float vDelta = this.uvCoords.getZ() - this.uvCoords.getY();*/
+        return new Vector2f(this.getModel().getDimension().getX(),
+                            this.getModel().getDimension().getY());
     }
 
 }

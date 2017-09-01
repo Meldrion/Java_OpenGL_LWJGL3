@@ -62,6 +62,7 @@ public class Matrix4f extends Matrix implements Serializable {
 	/**
 	 * Returns a string representation of this matrix
 	 */
+	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
 		buf.append(m00).append(' ').append(m10).append(' ').append(m20).append(' ').append(m30).append('\n');
