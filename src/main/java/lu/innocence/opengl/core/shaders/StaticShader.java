@@ -1,11 +1,14 @@
 package lu.innocence.opengl.core.shaders;
 
 import lu.innocence.opengl.Utils;
+import lu.innocence.opengl.core.exception.ShaderException;
 import lu.innocence.opengl.core.maths.Matrix4f;
 import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector4f;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 public class StaticShader extends ShaderProgram implements ShaderInterface {
 
@@ -17,7 +20,7 @@ public class StaticShader extends ShaderProgram implements ShaderInterface {
     private int uvLocation;
     private int disableTextureLocation;
 
-    public StaticShader() throws Exception {
+    public StaticShader() throws IOException, ShaderException {
         super(Utils.loadResource("/shaders/vertex.vert"),
               Utils.loadResource("/shaders/fragment.frag"));
     }

@@ -1,11 +1,12 @@
 package lu.innocence.opengl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
 public class Utils {
 
-    public static String loadResource(String fileName) throws Exception {
+    public static String loadResource(String fileName) throws IOException {
 
         String result;
         try (InputStream in = Utils.class.getClass().getResourceAsStream(fileName);

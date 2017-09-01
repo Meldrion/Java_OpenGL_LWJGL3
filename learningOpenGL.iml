@@ -60,5 +60,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.lwjgl:lwjgl-yoga:natives-linux:3.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:4.3" level="project" />
   </component>
 </module>

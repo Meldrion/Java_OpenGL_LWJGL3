@@ -6,6 +6,7 @@ import lu.innocence.opengl.core.DisplayManager;
 import lu.innocence.opengl.core.Loader;
 import lu.innocence.opengl.core.Renderer;
 import lu.innocence.opengl.core.entities.Entity;
+import lu.innocence.opengl.core.exception.ShaderException;
 import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector3f;
 import lu.innocence.opengl.core.maths.Vector4f;
@@ -17,6 +18,8 @@ import org.eclipse.swt.widgets.Display;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 
@@ -31,7 +34,8 @@ public class TestCanvas extends SWT_Canvas {
     private StaticShader shaderProgram;
     private Vector4f colorVector;
 
-    public TestCanvas(Display display, Composite parent) throws Exception {
+    public TestCanvas(Display display, Composite parent)
+            throws URISyntaxException, IOException, ShaderException {
         super(display, parent);
 
         this.loader = new Loader();

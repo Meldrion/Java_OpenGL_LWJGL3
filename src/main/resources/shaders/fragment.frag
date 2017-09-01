@@ -1,4 +1,4 @@
-#version 400 core
+#version 130
 
 // in vec3 colour;
 in vec2 pass_textureCoords;
