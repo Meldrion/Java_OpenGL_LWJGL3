@@ -103,7 +103,7 @@ public abstract class SWT_Canvas {
 
     public abstract void render(long delta,Renderer renderer);
 
-    Canvas getCanvasHandle() {
+    public Canvas getCanvasHandle() {
         return this.canvas;
     }
 

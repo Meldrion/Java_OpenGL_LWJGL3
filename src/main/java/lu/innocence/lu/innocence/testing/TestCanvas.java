@@ -13,6 +13,7 @@ import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.TexturedModel;
 import lu.innocence.opengl.core.shaders.StaticShader;
 import lu.innocence.opengl.core.texture.ModelTexture;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
@@ -33,11 +34,12 @@ public class TestCanvas extends SWT_Canvas {
     private Entity entity;
     private StaticShader shaderProgram;
     private Vector4f colorVector;
+    private Vector2f mousePosition;
 
     public TestCanvas(Display display, Composite parent)
             throws URISyntaxException, IOException, ShaderException {
         super(display, parent);
-
+        this.mousePosition = new Vector2f(0,0);
         this.loader = new Loader();
         String fileName = "textures/cave.png";
         URL url = Main.class.getClassLoader().getResource(fileName);
@@ -54,6 +56,13 @@ public class TestCanvas extends SWT_Canvas {
         this.entity.setUVCoords(0, 0, 32, 32);
         this.colorVector = new Vector4f(1f, 1, 1, 1);
         this.shaderProgram = new StaticShader();
+
+        this.getCanvasHandle().addListener(SWT.MouseMove, e -> {
+
+            int mapX = (e.x / 32) * 32;
+            int mapY = (e.y / 32) * 32;
+            this.mousePosition.set(mapX,mapY);
+        });
 
     }
 
@@ -100,16 +109,14 @@ public class TestCanvas extends SWT_Canvas {
         renderer.unbindTexture();
         this.shaderProgram.setTextureDisabled(true);
 
-        /*
-        Vector2f position = displayManager.getCursorPosition();
-        this.entity.setPosition(new Vector3f((int) (position.getX() / (32 * scale)) * (32 * scale),
-                (int) (position.getY() / (32 * scale)) * (32 * scale),
+        this.entity.setPosition(new Vector3f((int) (this.mousePosition.getX() / (32 * scale)) * (32 * scale),
+                (int) (this.mousePosition.getY() / (32 * scale)) * (32 * scale),
                 0));
 
         this.shaderProgram.setGrayScaleValue(0f);
         this.shaderProgram.setColorValue(new Vector4f(1, 0, 0, 0.5f));
         renderer.render(entity, this.shaderProgram);
-        */
+
         this.shaderProgram.unbind();
 
         renderer.unbindVertexArray();
