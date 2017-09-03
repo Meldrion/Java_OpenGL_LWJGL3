@@ -104,15 +104,18 @@ public class TestCanvas extends SWT_Canvas {
         }
 
         this.texturedEntity.unbind(renderer,shaderProgram);
-        this.texturedEntity.bindVertexArray(renderer);
+        this.texturedEntity.bindVertexArray(renderer,shaderProgram);
         this.texturedEntity.setPosition(new Vector3f((int) (this.mousePosition.getX() / (32 * scale)) * (32 * scale),
                 (int) (this.mousePosition.getY() / (32 * scale)) * (32 * scale),
                 0));
 
         this.shaderProgram.setGrayScaleValue(0f);
+        this.texturedEntity.setColor(new Vector4f(1,0,0,0.5f));
 
         this.texturedEntity.draw(renderer,shaderProgram);
-        this.texturedEntity.unbindVertexArray(renderer);
+        this.texturedEntity.unbindVertexArray(renderer,shaderProgram);
+
+        this.texturedEntity.setColor(new Vector4f(1,1,1,1));
     }
 
 }

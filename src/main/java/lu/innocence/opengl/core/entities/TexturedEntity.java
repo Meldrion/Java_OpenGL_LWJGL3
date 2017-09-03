@@ -6,6 +6,7 @@ import lu.innocence.opengl.core.maths.Vector3f;
 import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.Texture;
 import lu.innocence.opengl.core.shaders.EntityShader;
+import lu.innocence.opengl.core.shaders.ShaderProgram;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -128,22 +129,24 @@ public class TexturedEntity {
 
     public void bind(EntityShader shader,Renderer renderer) {
         shader.bind();
-        this.bindVertexArray(renderer);
+        this.bindVertexArray(renderer,shader);
         renderer.bindTexture(this);
     }
 
-    public void unbindVertexArray(Renderer renderer) {
+    public void unbindVertexArray(Renderer renderer, EntityShader shader) {
         renderer.unbindVertexArray();
+        shader.unbind();
     }
 
-    public void bindVertexArray(Renderer renderer) {
+    public void bindVertexArray(Renderer renderer, EntityShader shader) {
+        shader.bind();
         renderer.bindVertexArray(this);
     }
 
     public void unbind(Renderer renderer, EntityShader shader) {
         renderer.unbindTexture();
         shader.setTextureDisabled(true);
-        this.unbindVertexArray(renderer);
+        this.unbindVertexArray(renderer,shader);
         shader.unbind();
     }
 
