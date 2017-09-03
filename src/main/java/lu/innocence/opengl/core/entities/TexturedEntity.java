@@ -1,31 +1,35 @@
 package lu.innocence.opengl.core.entities;
 
-import lu.innocence.opengl.core.DisplayManager;
+import lu.innocence.opengl.core.Renderer;
 import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector3f;
 import lu.innocence.opengl.core.maths.Vector4f;
-import lu.innocence.opengl.core.models.TexturedModel;
+import lu.innocence.opengl.core.models.Texture;
+import lu.innocence.opengl.core.shaders.EntityShader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Entity {
+public class TexturedEntity {
 
-    private static final Logger LOGGER = LogManager.getLogger(Entity.class);
-    private TexturedModel model;
+    private static final Logger LOGGER = LogManager.getLogger(TexturedEntity.class);
+    private Texture model;
     private Vector3f position;
     private float rotationX;
     private float rotationY;
     private float rotationZ;
     private float scale;
     private Vector4f uvCoords;
+    private Vector4f color;
 
-    public Entity(TexturedModel model) {
-        this(model, new Vector3f(0, 0, 0), 0, 0, 0, 1);
+    public TexturedEntity(Texture texture) {
+        this(texture, new Vector3f(0, 0, 0), 0, 0, 0, 1);
     }
 
-    public Entity(TexturedModel model, Vector3f position,
-                  float rotationX, float rotationY, float rotationZ,
-                  float scale) {
+    public TexturedEntity(Texture model, Vector3f position,
+                          float rotationX, float rotationY, float rotationZ,
+                          float scale) {
+
+        this.color = new Vector4f(1,1,1,1);
         this.uvCoords = new Vector4f(0,0,1,1);
         this.setModel(model);
         this.setPosition(position);
@@ -34,14 +38,14 @@ public class Entity {
         this.setRotationZ(rotationZ);
         this.setScale(scale);
 
-        LOGGER.info("Created Entity");
+        LOGGER.info("Created TexturedEntity");
     }
 
-    public TexturedModel getModel() {
+    public Texture getModel() {
         return model;
     }
 
-    public void setModel(TexturedModel model) {
+    public void setModel(Texture model) {
         this.model = model;
     }
 
@@ -116,6 +120,36 @@ public class Entity {
 
         return new Vector2f(this.getModel().getDimension().getX() * uDelta,
                             this.getModel().getDimension().getY() * vDelta);
+    }
+
+    public void setColor(Vector4f color) {
+        this.color = new Vector4f(color);
+    }
+
+    public void bind(EntityShader shader,Renderer renderer) {
+        shader.bind();
+        this.bindVertexArray(renderer);
+        renderer.bindTexture(this);
+    }
+
+    public void unbindVertexArray(Renderer renderer) {
+        renderer.unbindVertexArray();
+    }
+
+    public void bindVertexArray(Renderer renderer) {
+        renderer.bindVertexArray(this);
+    }
+
+    public void unbind(Renderer renderer, EntityShader shader) {
+        renderer.unbindTexture();
+        shader.setTextureDisabled(true);
+        this.unbindVertexArray(renderer);
+        shader.unbind();
+    }
+
+    public void draw(Renderer renderer, EntityShader shader) {
+        shader.setColorValue(color);
+        renderer.render(this, shader);
     }
 
 }

@@ -5,12 +5,12 @@ import lu.innocence.opengl.core.DisplayManager;
 import lu.innocence.opengl.core.Loader;
 import lu.innocence.opengl.core.RenderInterface;
 import lu.innocence.opengl.core.Renderer;
-import lu.innocence.opengl.core.entities.Entity;
+import lu.innocence.opengl.core.entities.TexturedEntity;
 import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector3f;
 import lu.innocence.opengl.core.maths.Vector4f;
-import lu.innocence.opengl.core.models.TexturedModel;
-import lu.innocence.opengl.core.shaders.StaticShader;
+import lu.innocence.opengl.core.models.Texture;
+import lu.innocence.opengl.core.shaders.EntityShader;
 import lu.innocence.opengl.core.texture.ModelTexture;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,8 +27,8 @@ public class TestGame implements RenderInterface {
     private final DisplayManager displayManager;
 
     private Loader loader;
-    private Entity entity;
-    private StaticShader shaderProgram;
+    private TexturedEntity texturedEntity;
+    private EntityShader shaderProgram;
     private Vector4f colorVector;
 
     public TestGame(DisplayManager displayManager) {
@@ -46,13 +46,13 @@ public class TestGame implements RenderInterface {
         int[] textureDetails = loader.loadTexture
                 (file.getAbsolutePath());
         ModelTexture texture = new ModelTexture(textureDetails[0], textureDetails[1], textureDetails[2]);
-        TexturedModel texturedModel = new TexturedModel(loader, texture);
-        this.entity = new Entity(texturedModel);
-        this.entity.setScale(1.0f);
-        this.entity.setPosition(new Vector3f(0f, 0f, 0));
-        this.entity.setUVCoords(0, 0, 32, 32);
+        Texture texturedModel = new Texture(loader, texture);
+        this.texturedEntity = new TexturedEntity(texturedModel);
+        this.texturedEntity.setScale(1.0f);
+        this.texturedEntity.setPosition(new Vector3f(0f, 0f, 0));
+        this.texturedEntity.setUVCoords(0, 0, 32, 32);
         this.colorVector = new Vector4f(1f, 1, 1, 1);
-        this.shaderProgram = new StaticShader();
+        this.shaderProgram = new EntityShader();
         LOGGER.info("Creating and Loading worked fine");
     }
 
@@ -63,8 +63,8 @@ public class TestGame implements RenderInterface {
         this.shaderProgram.setColorValue(this.colorVector);
         this.shaderProgram.setTextureDisabled(false);
 
-        renderer.bindVertexArray(this.entity);
-        renderer.bindTexture(this.entity);
+        renderer.bindVertexArray(this.texturedEntity);
+        renderer.bindTexture(this.texturedEntity);
 
         float scale = 1f;
         for (int i = 0; i < DisplayManager.getWindowSize().getX() / (32 * scale); i++) {
@@ -73,24 +73,24 @@ public class TestGame implements RenderInterface {
                 for (int z = 0; z < 4; z++) {
                     switch (z) {
                         case 0:
-                            this.entity.setUVCoords(0, 0, 32, 32);
+                            this.texturedEntity.setUVCoords(0, 0, 32, 32);
                             break;
                         case 1:
-                            this.entity.setUVCoords(32, 0, 64, 32);
+                            this.texturedEntity.setUVCoords(32, 0, 64, 32);
                             break;
                         case 2:
-                            this.entity.setUVCoords(32, 32, 64, 64);
+                            this.texturedEntity.setUVCoords(32, 32, 64, 64);
                             break;
                         case 3:
-                            this.entity.setUVCoords(64, 32, 96, 64);
+                            this.texturedEntity.setUVCoords(64, 32, 96, 64);
                             break;
                         default:
                             break;
                     }
 
-                    this.entity.setScale(scale);
-                    this.entity.setPosition(new Vector3f(i * 32.0f * scale, j * 32.0f * scale, 0f));
-                    renderer.render(this.entity, this.shaderProgram);
+                    this.texturedEntity.setScale(scale);
+                    this.texturedEntity.setPosition(new Vector3f(i * 32.0f * scale, j * 32.0f * scale, 0f));
+                    renderer.render(this.texturedEntity, this.shaderProgram);
                 }
 
             }
@@ -100,13 +100,13 @@ public class TestGame implements RenderInterface {
         this.shaderProgram.setTextureDisabled(true);
 
         Vector2f position = displayManager.getCursorPosition();
-        this.entity.setPosition(new Vector3f((int) (position.getX() / (32 * scale)) * (32 * scale),
+        this.texturedEntity.setPosition(new Vector3f((int) (position.getX() / (32 * scale)) * (32 * scale),
                 (int) (position.getY() / (32 * scale)) * (32 * scale),
                 0));
 
         this.shaderProgram.setGrayScaleValue(0f);
         this.shaderProgram.setColorValue(new Vector4f(1, 0, 0, 0.5f));
-        renderer.render(entity, this.shaderProgram);
+        renderer.render(texturedEntity, this.shaderProgram);
 
         this.shaderProgram.unbind();
 

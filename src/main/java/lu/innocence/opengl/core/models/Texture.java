@@ -4,7 +4,7 @@ import lu.innocence.opengl.core.Loader;
 import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.texture.ModelTexture;
 
-public class TexturedModel {
+public class Texture {
 
     private RawModel rawModel;
     private ModelTexture modelTexture;
@@ -24,7 +24,7 @@ public class TexturedModel {
             1,0
     };
 
-    public TexturedModel(Loader loader, ModelTexture modelTexture) {
+    public Texture(Loader loader, ModelTexture modelTexture) {
         this.dimension = new Vector2f(modelTexture.getWidth(),modelTexture.getHeight());
         float w = modelTexture.getWidth() / 1280f * 2;
         float h = modelTexture.getHeight() / 800f * 2;
