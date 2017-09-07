@@ -1,7 +1,6 @@
 package lu.innocence.opengl;
 
 import lu.innocence.opengl.core.DisplayManager;
-import lu.innocence.opengl.core.FrameHandler;
 import lu.innocence.opengl.core.Renderer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,15 +23,15 @@ import static org.lwjgl.opengl.GL11.glViewport;
  * Created by Fabien Steines
  * Last Update on: 03.03.2017.
  */
-public abstract class SWT_Canvas {
+public abstract class SWTCanvas {
 
     private final Rectangle rect;
 
     private GLCanvas canvas;
     private Renderer renderer;
-    private static final Logger LOGGER = LogManager.getLogger(SWT_Canvas.class);
+    private static final Logger LOGGER = LogManager.getLogger(SWTCanvas.class);
 
-    public SWT_Canvas(Display display, Composite parent) {
+    public SWTCanvas(Display display, Composite parent) {
 
         LOGGER.info("Created OpenGL Canvas");
 

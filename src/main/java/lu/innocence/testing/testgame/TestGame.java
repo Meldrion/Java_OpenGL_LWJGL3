@@ -1,53 +1,44 @@
-package lu.innocence.lu.innocence.testing;
+package lu.innocence.testing.testgame;
 
 import lu.innocence.opengl.Main;
-import lu.innocence.opengl.SWT_Canvas;
 import lu.innocence.opengl.core.DisplayManager;
 import lu.innocence.opengl.core.Loader;
+import lu.innocence.opengl.core.RenderInterface;
 import lu.innocence.opengl.core.Renderer;
 import lu.innocence.opengl.core.entities.TexturedEntity;
-import lu.innocence.opengl.core.exception.ShaderException;
 import lu.innocence.opengl.core.maths.Vector2f;
 import lu.innocence.opengl.core.maths.Vector3f;
 import lu.innocence.opengl.core.maths.Vector4f;
 import lu.innocence.opengl.core.models.Texture;
 import lu.innocence.opengl.core.shaders.EntityShader;
 import lu.innocence.opengl.core.texture.ModelTexture;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 
-/**
- * Created by Fabien Steines on 02.09.2017.
- */
 @SuppressWarnings("Duplicates")
-public class TestCanvas extends SWT_Canvas {
+public class TestGame implements RenderInterface {
+
+    private static final Logger LOGGER = LogManager.getLogger(TestGame.class);
+    private final DisplayManager displayManager;
 
     private Loader loader;
     private TexturedEntity texturedEntity;
     private EntityShader shaderProgram;
     private Vector4f colorVector;
-    private Vector2f mousePosition;
 
-    public TestCanvas(Display display, Composite parent)
-            throws URISyntaxException, IOException, ShaderException {
-        super(display, parent);
-        this.mousePosition = new Vector2f(0,0);
+    public TestGame(DisplayManager displayManager) {
+        this.displayManager = displayManager;
+    }
+
+    @Override
+    public void create() throws Exception {
         this.loader = new Loader();
-        String fileName = "textures/cave.png";
-        URL url = Main.class.getClassLoader().getResource(fileName);
-        if (url == null)
-            throw new FileNotFoundException(fileName);
-        File file = Paths.get(url.toURI()).toFile();
-        int[] textureDetails = loader.loadTexture
-                (file.getAbsolutePath());
+        int[] textureDetails = loader.loadTexture("/textures/cave.png",true);
         ModelTexture texture = new ModelTexture(textureDetails[0], textureDetails[1], textureDetails[2]);
         Texture texturedModel = new Texture(loader, texture);
         this.texturedEntity = new TexturedEntity(texturedModel);
@@ -56,23 +47,18 @@ public class TestCanvas extends SWT_Canvas {
         this.texturedEntity.setUVCoords(0, 0, 32, 32);
         this.colorVector = new Vector4f(1f, 1, 1, 1);
         this.shaderProgram = new EntityShader();
-
-        this.getCanvasHandle().addListener(SWT.MouseMove, e -> {
-
-            int mapX = (e.x / 32) * 32;
-            int mapY = (e.y / 32) * 32;
-            this.mousePosition.set(mapX,mapY);
-        });
-
+        LOGGER.info("Creating and Loading worked fine");
     }
 
     @Override
-    public void render(long delta,Renderer renderer) {
-
-        this.texturedEntity.bind(shaderProgram,renderer);
+    public void render(Renderer renderer) {
+        this.shaderProgram.bind();
         this.shaderProgram.setGrayScaleValue(0f);
         this.shaderProgram.setColorValue(this.colorVector);
         this.shaderProgram.setTextureDisabled(false);
+
+        renderer.bindVertexArray(this.texturedEntity);
+        renderer.bindTexture(this.texturedEntity);
 
         float scale = 1f;
         for (int i = 0; i < DisplayManager.getWindowSize().getX() / (32 * scale); i++) {
@@ -98,24 +84,33 @@ public class TestCanvas extends SWT_Canvas {
 
                     this.texturedEntity.setScale(scale);
                     this.texturedEntity.setPosition(new Vector3f(i * 32.0f * scale, j * 32.0f * scale, 0f));
-                    this.texturedEntity.draw(renderer,shaderProgram);
+                    renderer.render(this.texturedEntity, this.shaderProgram);
                 }
+
             }
         }
 
-        this.texturedEntity.unbind(renderer,shaderProgram);
-        this.texturedEntity.bindVertexArray(renderer,shaderProgram);
-        this.texturedEntity.setPosition(new Vector3f((int) (this.mousePosition.getX() / (32 * scale)) * (32 * scale),
-                (int) (this.mousePosition.getY() / (32 * scale)) * (32 * scale),
+        renderer.unbindTexture();
+        this.shaderProgram.setTextureDisabled(true);
+
+        Vector2f position = displayManager.getCursorPosition();
+        this.texturedEntity.setPosition(new Vector3f((int) (position.getX() / (32 * scale)) * (32 * scale),
+                (int) (position.getY() / (32 * scale)) * (32 * scale),
                 0));
 
         this.shaderProgram.setGrayScaleValue(0f);
-        this.texturedEntity.setColor(new Vector4f(1,0,0,0.5f));
+        this.shaderProgram.setColorValue(new Vector4f(1, 0, 0, 0.5f));
+        renderer.render(texturedEntity, this.shaderProgram);
 
-        this.texturedEntity.draw(renderer,shaderProgram);
-        this.texturedEntity.unbindVertexArray(renderer,shaderProgram);
+        this.shaderProgram.unbind();
 
-        this.texturedEntity.setColor(new Vector4f(1,1,1,1));
+        renderer.unbindVertexArray();
     }
+
+    @Override
+    public void destroy() {
+        this.loader.cleanUp();
+    }
+
 
 }

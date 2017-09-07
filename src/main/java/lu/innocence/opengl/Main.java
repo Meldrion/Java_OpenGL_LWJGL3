@@ -2,7 +2,7 @@ package lu.innocence.opengl;
 
 import lu.innocence.opengl.core.DisplayManager;
 import lu.innocence.opengl.core.exception.GLFWException;
-import lu.innocence.lu.innocence.testing.testgame.TestGame;
+import lu.innocence.testing.testgame.TestGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -6,6 +6,11 @@ import java.util.Scanner;
 
 public class Utils {
 
+
+    private Utils() {
+
+    }
+
     public static String loadResource(String fileName) throws IOException {
 
         String result;

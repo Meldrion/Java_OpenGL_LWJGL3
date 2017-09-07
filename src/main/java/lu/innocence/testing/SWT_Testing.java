@@ -1,4 +1,4 @@
-package lu.innocence.lu.innocence.testing;
+package lu.innocence.testing;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +50,6 @@ public class SWT_Testing {
 
         shell.setText("Ignis");
         shell.setSize(800, 600);
-
         shell.pack();
         shell.open();
 

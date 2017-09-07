@@ -16,9 +16,15 @@ public class TextureLoader {
 
     private TextureLoader() {}
 
-    public static int[] loadTexture(String fileName) throws IOException {
+    public static int[] loadTexture(String fileName,boolean internal) throws IOException {
         // Load Texture file
-        PNGDecoder decoder = new PNGDecoder(new FileInputStream(fileName));
+        PNGDecoder decoder;
+
+        if (!internal) {
+            decoder = new PNGDecoder(new FileInputStream(fileName));
+        } else {
+            decoder = new PNGDecoder(TextureLoader.class.getResourceAsStream(fileName));
+        }
 
         // Load texture contents into a byte buffer
         ByteBuffer buf = ByteBuffer.allocateDirect(
