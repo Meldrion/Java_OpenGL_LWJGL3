@@ -3,13 +3,11 @@ package lu.innocence.testing;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.*;
 
 /**
  * Created by Fabien Steines
@@ -51,6 +49,9 @@ public class SWT_Testing {
         shell.setText("Ignis");
         shell.setSize(800, 600);
         shell.pack();
+
+        this.center(display,shell);
+
         shell.open();
 
         while (!shell.isDisposed()) {
@@ -59,6 +60,17 @@ public class SWT_Testing {
         }
 
         display.dispose();
+    }
+
+    private void center(final Display display,Shell shell) {
+        Monitor primary = display.getPrimaryMonitor();
+        Rectangle bounds = primary.getBounds();
+        Rectangle rect = shell.getBounds();
+
+        int x = bounds.x + (bounds.width - rect.width) / 2;
+        int y = bounds.y + (bounds.height - rect.height) / 2;
+
+        shell.setLocation(x, y);
     }
 
     /**

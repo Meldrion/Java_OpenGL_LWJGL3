@@ -68,7 +68,7 @@ public class TestCanvas extends SWTCanvas {
         for (int i = 0; i < DisplayManager.getWindowSize().getX() / (32 * scale); i++) {
             for (int j = 0; j < DisplayManager.getWindowSize().getY() / (32 * scale); j++) {
 
-                for (int z = 0; z < 4; z++) {
+                for (int z = 0; z < 3; z++) {
                     switch (z) {
                         case 0:
                             this.texturedEntity.setUVCoords(0, 0, 32, 32);
